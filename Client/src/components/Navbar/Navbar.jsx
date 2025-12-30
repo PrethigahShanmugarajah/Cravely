@@ -96,7 +96,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-[#0F172A] border border-b-8 border-teal-900/30 shadow-teal-900/30 sticky top-0 z-50 shadow-[0_25px_50px_-12px] group/nav overflow-x-hidden">
+    <nav className="bg-[#0F172A] border border-b-8 border-teal-900/30 shadow-teal-900/30 sticky top-0 z-50 shadow-[0_25px_50px_-12px] group/nav overflow-x-hidden hide-scrollbar">
       <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-full max-w-7xl px-4">
         <div className="h-1.5 bg-linear-to-r from-transparent via-teal-600/50 to-transparent shadow-[0_0_20px] shadow-teal-500/30">
           <FaUtensils
