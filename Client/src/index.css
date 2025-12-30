@@ -31,3 +31,12 @@
     transform: rotate(360deg) translateX(150px) rotate(-360deg);
   }
 }
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
