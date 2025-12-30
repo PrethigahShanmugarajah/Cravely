@@ -1,10 +1,11 @@
 // Craverly / Client / src / pages / Home / Home.jsx
+import Banner from "../../components/Banner/Banner";
 
 const Home = () => {
   return (
-    <div>
-      <h1 className="text-teal-500 text-2xl bg-[#0F172A]">Home</h1>
-    </div>
+    <>
+      <Banner />
+    </>
   );
 };
 
