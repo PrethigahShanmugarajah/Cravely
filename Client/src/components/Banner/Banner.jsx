@@ -10,7 +10,7 @@ const Banner = () => {
 
   const { bannerImage, orbitImages, video } = bannerAssets;
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching for:", searchQuery);
   };
@@ -23,15 +23,15 @@ const Banner = () => {
           {/* -------- Left Content -------- */}
           <div className="flex-1 space-y-8 relative md:pr-8 lg:pr-19 text-center md:text-left">
             <h1 className="text-4xl sm:text-5xl md:text-4xl lg:text-6xl font-bold leading-tight font-serif drop-shadow-md">
-              We're Here <br />
+              Fresh Food <br />
               <span className="text-teal-400 bg-linear-to-r from-teal-400 to-teal-300 bg-clip-text">
-                For Food & Delivery
+                Delivered To Your Door
               </span>
             </h1>
 
             <p className="text-lg md:text-lg lg:text-xl font-playfair italic sm:text-xl text-teal-100 max-w-xl opacity-90 mx-auto md:mx-0">
-              Best cooks and best delivery guys all at your service. Hot tasty
-              food will reach you in 60 minutes.
+              Expert chefs and fast delivery partners working together to bring
+              you fresh, delicious meals in under 60 minutes.
             </p>
 
             <form
@@ -47,8 +47,8 @@ const Banner = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Discover your next favourite meal..."
-                  className="w-full pr-6 bf-transparent outline-none placeholder:teal-200/70 text-lg font-medium tracking-wide"
+                  placeholder="What do you feel like eating today?"
+                  className="w-full pr-6 bg-transparent outline-none placeholder:teal-200/70 text-lg font-medium tracking-wide"
                 />
 
                 <button
