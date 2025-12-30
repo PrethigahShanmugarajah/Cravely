@@ -1,8 +1,33 @@
-/* Client / src / index.css */
+/* Cravely / Client / src / index.css */
 @import url("https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 
 @import "tailwindcss";
 
 * {
   font-family: "Inria Serif", serif;
+}
+
+.orbit {
+  animation: orbit 20s linear infinite;
+}
+
+.orbit-delay-5 {
+  animation: orbit 20s linear infinite -5s;
+}
+
+.orbit-delay-10 {
+  animation: orbit 20s linear infinite -10s;
+}
+
+.orbit-delay-15 {
+  animation: orbit 20s linear infinite -15s;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(150px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(150px) rotate(-360deg);
+  }
 }
