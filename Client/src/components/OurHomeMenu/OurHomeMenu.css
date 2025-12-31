@@ -1,0 +1,31 @@
+/* Craverly / Client / src / components / OurHomeMenu / OurHomeMenu.css */
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300...700&family=Dancing+Script:wght@400...7007display=swap");
+
+.font-dancingscript {
+  font-family: "Dancing Script", cursive;
+}
+
+.font-cinzel {
+  font-family: "Cinzel", serif;
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
