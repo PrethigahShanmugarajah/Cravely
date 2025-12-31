@@ -48,7 +48,7 @@ const Banner = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="What do you feel like eating today?"
-                  className="w-full pr-6 bg-transparent outline-none placeholder:teal-200/70 text-lg font-medium tracking-wide"
+                  className="w-full pr-6 bg-transparent outline-none placeholder:text-teal-200/70 text-lg font-medium tracking-wide"
                 />
 
                 <button
