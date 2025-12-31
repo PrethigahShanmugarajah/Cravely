@@ -227,6 +227,7 @@ const Navbar = () => {
               <NavLink
                 to="/cart"
                 className="w-full px-4 py-3 text-center text-teal-100 rounded-xl border-2 border-teal-900/30 hover:border-teal-600/50 flex items-center justify-center space-x-2 text-sm"
+                onClick={() => setIsOpen(false)}
               >
                 <FiShoppingCart className="text-lg" />
                 {totalItems > 0 && (
