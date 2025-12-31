@@ -17,14 +17,7 @@ const SpecialOffer = () => {
 
   const initialData = [...cardData, ...additionalData];
 
-  const {
-    cartItems,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    cartTotal,
-    totalItems,
-  } = useCart();
+  const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
 
   return (
     <div className="bg-linear-to-b from-[#1C1B1F] to-[#27272A] text-white py-16 px-4 font-[Poppins]">
@@ -34,12 +27,12 @@ const SpecialOffer = () => {
             className="text-5xl font-bold mb-4
            transform transition-all bg-linear-to-r from-teal-400 to-slate-500 bg-clip-text text-transparent font-[Playfair_Display] italic"
           >
-            Today's <span className="text-stoke-gold">Special</span>Offers
+            Today's <span className="text-stoke-gold">Exclusive</span>Delights
           </h1>
 
           <p className="text-lg text-gray-300 max-w-3xl mx-auto tracking-auto tracking-wide leading-relaxed">
-            Savor the extraordinary with our culinary masterpieces crafted to
-            perfection.
+            Indulge in our chef’s special creations, designed to tantalize your
+            taste buds.
           </p>
         </div>
 
