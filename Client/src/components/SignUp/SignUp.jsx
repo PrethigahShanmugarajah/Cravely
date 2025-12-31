@@ -64,7 +64,7 @@ const SignUp = () => {
             placeholder="Username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
+            className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
             required
           />
 
@@ -74,7 +74,7 @@ const SignUp = () => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
+            className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
             required
           />
 
@@ -85,7 +85,7 @@ const SignUp = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
+              className="w-full px-4 py-3 rounded-lg bg-[#0F172A] text-teal-100 placeholder:text-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all duration-200 hover:scale-[1.02]"
               required
             />
 
