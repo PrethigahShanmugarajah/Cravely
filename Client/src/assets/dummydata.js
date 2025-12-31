@@ -157,7 +157,7 @@ export const aboutfeature = [
 // SPECIAL OFFER
 export const commonTransition = "transition-all duration-300";
 export const addButtonBase =
-  "flex items-center gap-2 bg-gradient-to-r from-red-600 to-teal-600 text-white px-5 py-2.5 rounded-xl font-bold border-2 border-teal-400/30";
+  "flex items-center gap-2 bg-gradient-to-r from-slate-600 to-teal-600 text-white px-5 py-2.5 rounded-xl font-bold border-2 border-teal-400/30";
 export const addButtonHover =
   "hover:gap-3 hover:shadow-lg hover:shadow-teal-500/30 active:scale-95 relative overflow-hidden";
 
@@ -203,6 +203,7 @@ export const cardData = [
     price: "₹200",
   },
 ];
+
 export const additionalData = [
   {
     id: 5,
@@ -249,7 +250,7 @@ export const socialIcons = [
   {
     icon: FaFacebook,
     link: "https://www.facebook.com/share/1DjbwhdR4z/",
-    color: "#3b5998",
+    color: "#3B5998",
     label: "Facebook",
   },
   {
@@ -261,7 +262,7 @@ export const socialIcons = [
   {
     icon: FaXTwitter,
     link: "https://x.com/HexagonDService?t=Vv5ReZAIbXONqkq_O0ksWQ&s=09",
-    color: "#000",
+    color: "#000000",
     label: "X",
   },
   {
