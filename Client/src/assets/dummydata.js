@@ -62,7 +62,7 @@ export const stats = [
     number: "10M+",
     label: "Deliveries",
     icon: GiFoodTruck,
-    gradient: "from-teal-500 via-orange-400 to-yellow-600",
+    gradient: "from-teal-500 via-cyan-400 to-yellow-600",
   },
   {
     number: "98%",
@@ -80,7 +80,7 @@ export const stats = [
     number: "24/7",
     label: "Support",
     icon: FaRegClock,
-    gradient: "from-teal-500 via-orange-400 to-rose-500",
+    gradient: "from-teal-500 via-cyan-400 to-rose-500",
   },
 ];
 
@@ -132,7 +132,7 @@ export const aboutfeature = [
     icon: FaBolt,
     title: "Instant Ordering",
     text: "Seamless digital experience",
-    color: "from-teal-400 to-orange-500",
+    color: "from-teal-400 to-cyan-500",
   },
   {
     icon: FaRegClock,
@@ -144,7 +144,7 @@ export const aboutfeature = [
     icon: FaCalendarCheck,
     title: "Exclusive Booking",
     text: "Priority reservations",
-    color: "from-emerald-400 to-cyan-600",
+    color: "from-amber-400 to-orange-600",
   },
   {
     icon: FaFire,
