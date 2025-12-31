@@ -19,17 +19,18 @@ const AboutHome = () => {
           <div className="space-y-4 sm:space-y-8 px-4 sm:px-0">
             <h2 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold leading-tight">
               <span className="font-cursive text-4xl sm:text-5xl md:text-6xl bg-linear-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
-                Epicurean Elegance
+                Culinary Masterpieces
               </span>
               <br />
               <span className="inline-block mt-2 sm:mt-4 text-2xl sm:text-3xl md:text-4xl opacity-90 font-light">
-                Where Flavors Dance &amp; Memories Bloom
+                Where Taste Meets Art & Every Bite Tells a Story
               </span>
             </h2>
 
             <p className="text-base sm:text-lg md:text-xl opacity-90 leading-relaxed max-w-3xl font-serif italic border-l-4 bg-teal-500/60 pl-4 sm:pl-6 py-2 bg-linear-to-r from-white/5 to-transparent">
-              "In our kitchen, passion meets precision. We craft not just meals,
-              but culinary journeys that linger on the palate and in the heart."
+              "Every dish we create is a harmony of flavor and artistry,
+              designed to delight the senses and leave lasting memories on every
+              plate."
             </p>
           </div>
 
