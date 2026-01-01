@@ -3,7 +3,13 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import path from "path";
+import { fileURLToPath } from "url";
 import userRouter from "./routes/userRoutes.js";
+import itemRouter from "./routes/itemRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /* -------- INITIALIZE EXPRESS -------- */
 const app = express();
@@ -34,6 +40,8 @@ app.use(
 /* -------- ROUTES -------- */
 app.get("/", (req, res) => res.send("API is Working!"));
 app.use("/api/user", userRouter);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/items", itemRouter);
 
 /* -------- PORT -------- */
 const port = process.env.PORT || 4000;
