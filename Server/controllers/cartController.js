@@ -1,9 +1,8 @@
 // Cravely / Server / controllers / cartController.js
-import asyncHandler from "express-async-handler";
 import { CartItem } from "../models/cartModel.js";
 
 /* -------- Get Cart -------- */
-export const getCart = asyncHandler(async (req, res) => {
+export const getCart = async (req, res) => {
   try {
     const items = await CartItem.find({ user: req.user._id }).populate("item");
 
@@ -27,10 +26,10 @@ export const getCart = asyncHandler(async (req, res) => {
       error: `Get Cart Error: ${error.message}`,
     });
   }
-});
+};
 
 /* -------- Add to Cart -------- */
-export const addToCart = asyncHandler(async (req, res) => {
+export const addToCart = async (req, res) => {
   try {
     const { itemId, quantity } = req.body;
 
@@ -102,4 +101,47 @@ export const addToCart = asyncHandler(async (req, res) => {
       error: `Add to Cart Error: ${error.message}`,
     });
   }
-});
+};
+
+/* -------- Update Cart Item -------- */
+export const updateCartItem = async (req, res) => {
+  try {
+    const { quantity } = req.body;
+
+    const cartItem = await CartItem.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+
+    if (!cartItem) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart item not found",
+      });
+    }
+
+    // cartItem.quantity = Math.max(1, quantity);
+    cartItem.quantity = Math.max(1, cartItem.quantity + quantity);
+
+    await cartItem.save();
+    await cartItem.populate("item");
+
+    return res.status(200).json({
+      success: true,
+      message: "Cart item updated successfully!",
+      item: {
+        _id: cartItem._id.toString(),
+        item: cartItem.item,
+        quantity: cartItem.quantity,
+      },
+    });
+  } catch (error) {
+    console.error("Update Cart Item Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Update Cart Items",
+      error: `Update Cart Items Error: ${error.message}`,
+    });
+  }
+};
