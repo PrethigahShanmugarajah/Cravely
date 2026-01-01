@@ -57,7 +57,10 @@ export const getItems = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Items fetched successfully!",
+      message:
+        withFullUrl.length === 0
+          ? "No items available"
+          : "Items fetched successfully!",
       items: withFullUrl,
     });
   } catch (error) {
@@ -80,13 +83,11 @@ export const deleteItem = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Item not found" });
     }
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Item deleted successfully!",
-        item: removed,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Item deleted successfully!",
+      item: removed,
+    });
   } catch (error) {
     console.error("Delete Item Error:", error.message);
 
