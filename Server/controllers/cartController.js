@@ -14,7 +14,10 @@ export const getCart = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Cart fetched successfully!",
+      message:
+        cartItems.length === 0
+          ? "Your cart is empty"
+          : "Cart fetched successfully!",
       cartItems,
     });
   } catch (error) {
@@ -186,6 +189,15 @@ export const deleteCartItem = async (req, res) => {
 /* -------- Clear Cart -------- */
 export const clearCart = async (req, res) => {
   try {
+    const cartItems = await CartItem.find({ user: req.user._id });
+
+    if (cartItems.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Your cart is already empty",
+      });
+    }
+
     // await CartItem.deleteMany({ user: req.user._id });
     const result = await CartItem.deleteMany({ user: req.user._id });
 
