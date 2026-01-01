@@ -182,3 +182,24 @@ export const deleteCartItem = async (req, res) => {
     });
   }
 };
+
+/* -------- Clear Cart -------- */
+export const clearCart = async (req, res) => {
+  try {
+    // await CartItem.deleteMany({ user: req.user._id });
+    const result = await CartItem.deleteMany({ user: req.user._id });
+
+    return res.status(200).json({
+      success: true,
+      message: `Cart cleared successfully! ${result.deletedCount} item(s) removed!`,
+    });
+  } catch (error) {
+    console.error("Clear Cart Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Clear Cart",
+      error: `Clear Cart Error: ${error.message}`,
+    });
+  }
+};
