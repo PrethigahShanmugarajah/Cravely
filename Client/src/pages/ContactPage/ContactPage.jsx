@@ -1,10 +1,11 @@
 // Craverly / Client / src / pages / ContactPage / ContactPage.jsx
+import Contact from "../../components/Contact/Contact";
 
 const ContactPage = () => {
   return (
-    <div>
-      <h1 className="text-teal-500 text-2xl bg-[#0F172A]">ContactPage</h1>
-    </div>
+    <>
+      <Contact />
+    </>
   );
 };
 
