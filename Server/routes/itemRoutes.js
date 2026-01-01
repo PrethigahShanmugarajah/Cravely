@@ -1,7 +1,7 @@
 // Cravely / Server / routes / itemRoutes.js
 import express from "express";
 import multer from "multer";
-import { createItem } from "../controllers/itemController.js";
+import { createItem, getItems } from "../controllers/itemController.js";
 
 const itemRouter = express.Router();
 
@@ -13,5 +13,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 itemRouter.post("/create", upload.single("image"), createItem);
+itemRouter.get("/get", getItems);
 
 export default itemRouter;
