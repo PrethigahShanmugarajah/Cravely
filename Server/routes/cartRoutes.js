@@ -2,6 +2,7 @@
 import express from "express";
 import {
   addToCart,
+  clearCart,
   deleteCartItem,
   getCart,
   updateCartItem,
@@ -14,5 +15,6 @@ cartRouter.get("/get", authMiddleware, getCart);
 cartRouter.post("/add", authMiddleware, addToCart);
 cartRouter.put("/update/:id", authMiddleware, updateCartItem);
 cartRouter.delete("/delete/:id", authMiddleware, deleteCartItem);
+cartRouter.delete("/clear", authMiddleware, clearCart);
 
 export default cartRouter;
