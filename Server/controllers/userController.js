@@ -72,3 +72,45 @@ export const registerUser = async (req, res) => {
     });
   }
 };
+
+/* -------- User Login -------- */
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User does not exist" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    const token = createToken(user._id);
+    return res.status(200).json({
+      success: true,
+      token,
+      message: "Login successfully!",
+      user: {
+        id: user._id,
+        username: user.userName ?? user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("User Login Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Login User",
+      error: `User Login Error: ${error.message}`,
+    });
+  }
+};
