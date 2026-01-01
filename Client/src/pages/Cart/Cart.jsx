@@ -1,10 +1,11 @@
 // Craverly / Client / src / pages / Cart / Cart.jsx
+import CartPage from "../../components/CartPage/CartPage";
 
 const Cart = () => {
   return (
-    <div>
-      <h1 className="text-teal-500 text-2xl bg-[#0F172A]">Cart</h1>
-    </div>
+    <>
+      <CartPage />
+    </>
   );
 };
 
