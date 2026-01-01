@@ -39,3 +39,34 @@ export const createItem = async (req, res) => {
     });
   }
 };
+
+/* -------- Get All Items -------- */
+export const getItems = async (req, res) => {
+  try {
+    const items = await itemModel.find().sort({ createdAt: -1 });
+    const host = `${req.protocol}://${req.get("host")}`;
+
+    // const withFullUrl = itemModel.applyTimestamps((i) => ({
+    //   ...i.toObject(),
+    //   imageUrl: i.imageUrl ? host + i.imageUrl : "",
+    // }));
+    const withFullUrl = items.map((i) => ({
+      ...i.toObject(),
+      imageUrl: i.imageUrl ? host + i.imageUrl : "",
+    }));
+
+    return res.status(200).json({
+      success: true,
+      message: "Items fetched successfully!",
+      items: withFullUrl,
+    });
+  } catch (error) {
+    console.error("Get All Items Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Get Items",
+      error: `Get All Items Error: ${error.message}`,
+    });
+  }
+};
