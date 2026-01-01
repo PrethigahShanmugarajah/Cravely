@@ -15,6 +15,6 @@ const itemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const itemModel = mongoose.models.item || mongoose.model("item", itemSchema);
+const itemModel = mongoose.models.item || mongoose.model("Item", itemSchema);
 
 export default itemModel;
