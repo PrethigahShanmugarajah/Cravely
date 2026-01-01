@@ -70,3 +70,30 @@ export const getItems = async (req, res) => {
     });
   }
 };
+
+/* -------- Delete Item -------- */
+export const deleteItem = async (req, res) => {
+  try {
+    const removed = await itemModel.findByIdAndDelete(req.params.id);
+    if (!removed) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Item not found" });
+    }
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Item deleted successfully!",
+        item: removed,
+      });
+  } catch (error) {
+    console.error("Delete Item Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to Delete Item",
+      error: `Delete Item Error: ${error.message}`,
+    });
+  }
+};
