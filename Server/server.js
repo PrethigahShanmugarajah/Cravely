@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import userRouter from "./routes/userRoutes.js";
 import itemRouter from "./routes/itemRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +43,7 @@ app.get("/", (req, res) => res.send("API is Working!"));
 app.use("/api/user", userRouter);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/items", itemRouter);
+app.use("/api/cart", cartRouter);
 
 /* -------- PORT -------- */
 const port = process.env.PORT || 4000;
