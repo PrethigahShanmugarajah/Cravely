@@ -6,6 +6,7 @@ import {
   deleteItem,
   getItems,
 } from "../controllers/itemController.js";
+import authMiddleware from "../middlewares/auth.js";
 
 const itemRouter = express.Router();
 
@@ -16,8 +17,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-itemRouter.post("/create", upload.single("image"), createItem);
+itemRouter.post("/create", upload.single("image"), authMiddleware, createItem);
 itemRouter.get("/get", getItems);
-itemRouter.delete("/delete/:id", deleteItem);
+itemRouter.delete("/delete/:id", authMiddleware, deleteItem);
 
 export default itemRouter;
