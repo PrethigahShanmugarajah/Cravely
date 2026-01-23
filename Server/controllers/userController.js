@@ -10,7 +10,7 @@ const createToken = (id) => {
 };
 
 /* -------- User Register -------- */
-export const registerUser = async (req, res) => {
+export const userRegister = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -67,14 +67,14 @@ export const registerUser = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Register User",
+      message: "Failed to register user",
       error: `User Register Error: ${error.message}`,
     });
   }
 };
 
 /* -------- User Login -------- */
-export const loginUser = async (req, res) => {
+export const userLogin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -109,7 +109,7 @@ export const loginUser = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Login User",
+      message: "Failed to login user",
       error: `User Login Error: ${error.message}`,
     });
   }
