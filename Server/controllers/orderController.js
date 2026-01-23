@@ -257,3 +257,45 @@ export const ordersGet = async (req, res) => {
     });
   }
 };
+
+/* -------- Order Admin Get All -------- */
+export const orderAdminGetAll = async (req, res) => {
+  try {
+    const raw = await orderModel.find({}).sort({ createdAt: -1 }).lean();
+
+    const formatted = raw.map((o) => ({
+      _id: o._id,
+      user: o.user,
+      firstName: o.firstName,
+      lastName: o.lastName,
+      email: o.email,
+      phone: o.phone,
+      address: o.address ?? o.shippingAddress?.address ?? "",
+      city: o.city ?? o.shippingAddress?.city ?? "",
+      zipCode: o.zipCode ?? o.shippingAddress?.zipCode ?? "",
+      paymentMethod: o.paymentMethod,
+      paymentStatus: o.paymentStatus,
+      status: o.status,
+      createdAt: o.createdAt,
+      items: o.items.map((i) => ({
+        _id: i._id,
+        item: i.item,
+        quantity: i.quantity,
+      })),
+    }));
+
+    return res.status(200).json({
+      success: true,
+      message: "All orders fetched successfully!",
+      orders: formatted,
+    });
+  } catch (error) {
+    console.error("Order Admin Get All Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch all orders.",
+      error: `Order Admin Get All Error: ${error.message}`,
+    });
+  }
+};
