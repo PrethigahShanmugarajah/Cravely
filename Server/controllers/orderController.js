@@ -222,3 +222,38 @@ export const orderConfirmPayment = async (req, res) => {
     });
   }
 };
+
+/* -------- Orders Get -------- */
+export const ordersGet = async (req, res) => {
+  try {
+    const filter = { user: req.user._id };
+    const rawOrders = await orderModel
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const formatted = rawOrders.map((o) => ({
+      ...o,
+      items: o.items.map((i) => ({
+        _id: i._id,
+        item: i.item,
+        quantity: i.quantity,
+      })),
+      createdAt: o.createdAt,
+      paymentStatus: o.paymentStatus,
+    }));
+    return res.status(200).json({
+      success: true,
+      message: "Order fetched successfully!",
+      orders: formatted,
+    });
+  } catch (error) {
+    console.error("Orders Get Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Order failed to fetch.",
+      error: `Orders Get Error: ${error.message}`,
+    });
+  }
+};
