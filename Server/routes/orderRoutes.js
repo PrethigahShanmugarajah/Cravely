@@ -2,6 +2,7 @@
 import express from "express";
 import authMiddleware from "../middlewares/auth.js";
 import {
+  orderAdminGetAll,
   orderConfirmPayment,
   orderCreate,
   ordersGet,
@@ -11,6 +12,7 @@ const orderRouter = express.Router();
 
 orderRouter.post("/order-create", authMiddleware, orderCreate);
 orderRouter.get("/order-confirm-payment", authMiddleware, orderConfirmPayment);
-orderRouter.get("/orders-get", authMiddleware, ordersGet);
+orderRouter.get("/order-get", authMiddleware, ordersGet);
+orderRouter.get("/order-admin-get-all", orderAdminGetAll);
 
 export default orderRouter;
