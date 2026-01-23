@@ -177,3 +177,48 @@ export const orderCreate = async (req, res) => {
     });
   }
 };
+
+/* -------- Order Confirm Payment -------- */
+export const orderConfirmPayment = async (req, res) => {
+  try {
+    const { session_id } = req.query;
+    if (!session_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Session ID is required." });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    if (session.payment_status === "paid") {
+      const order = await orderModel.findOneAndUpdate(
+        { sessionId: session_id },
+        { paymentStatus: "succeeded" },
+        { new: true },
+      );
+
+      if (!order) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Order not found." });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Order payment confirmed successfully!",
+        order,
+      });
+    }
+
+    return res
+      .status(400)
+      .json({ success: false, message: "Order payment is not completed." });
+  } catch (error) {
+    console.error("Order Confirm Payment Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Order failed to confirm payment.",
+      error: `Order Confirm Payment Error: ${error.message}`,
+    });
+  }
+};
