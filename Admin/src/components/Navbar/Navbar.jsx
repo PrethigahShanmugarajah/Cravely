@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { FiList, FiMenu, FiPackage, FiPlusCircle, FiX } from "react-icons/fi";
 import { FaConciergeBell } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+import { styles } from "../../assets/dummyadmin";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,17 +33,37 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center space-x-4">
           {navLinks.map((link) => (
-            <a
+            <NavLink
               key={link.name}
-              href={link.href}
-              className="flex items-center space-x-1 text-teal-200 hover:text-teal-400"
+              to={link.href}
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ${isActive ? "bg-teal-900/30 border-teal-500 text-teal-300" : "border-teal-900/30 text-teal-100 hover:border-teal-500 hover:bg-teal-900/20"}`
+              }
             >
               {link.icon}
               <span>{link.name}</span>
-            </a>
+            </NavLink>
           ))}
         </div>
       </div>
+
+      {menuOpen && (
+        <div className={styles.mobileMenu}>
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all ml-2 mr-2 ${isActive ? "bg-teal-900/30 border-teal-500 text-teal-300" : "border-teal-900/30 text-teal-100 hover:border-teal-500 hover:bg-teal-900/20"}`
+              }
+            >
+              {link.icon}
+              <span>{link.name}</span>
+            </NavLink>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };
