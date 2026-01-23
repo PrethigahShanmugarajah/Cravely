@@ -1,10 +1,10 @@
 // Cravely / Server / routes / userRoutes.js
 import express from "express";
-import { loginUser, registerUser } from "../controllers/userController.js";
+import { userLogin, userRegister } from "../controllers/userController.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/register", registerUser);
-userRouter.post("/login", loginUser);
+userRouter.post("/user-register", userRegister);
+userRouter.post("/user-login", userLogin);
 
 export default userRouter;
