@@ -364,3 +364,41 @@ export const orderGetById = async (req, res) => {
     });
   }
 };
+
+/* -------- Order Update By Id -------- */
+export const orderUpdateById = async (req, res) => {
+  try {
+    const order = await orderModel.findById(req.params.id);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found." });
+    }
+
+    if (!order.user.equals(req.user._id)) {
+      return res.status(403).json({ success: false, message: "Access Denied" });
+    }
+
+    if (req.body.email && order.email !== req.body.email) {
+      return res.status(403).json({ success: false, message: "Access Denied" });
+    }
+
+    const updated = await orderModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Order updated successfully!", updated });
+  } catch (error) {
+    console.error("Order Update By Id Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update the order.",
+      error: `Order Update By Id Error: ${error.message}`,
+    });
+  }
+};
