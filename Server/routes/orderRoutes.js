@@ -8,6 +8,7 @@ import {
   orderGetById,
   ordersGet,
   orderUpdateAnyByAdmin,
+  orderUpdateById,
 } from "../controllers/orderController.js";
 
 const orderRouter = express.Router();
@@ -18,5 +19,6 @@ orderRouter.get("/order-get", authMiddleware, ordersGet);
 orderRouter.get("/order-admin-get-all", orderAdminGetAll);
 orderRouter.put("/order-update-any-by-admin/:id", orderUpdateAnyByAdmin);
 orderRouter.get("/order-get-by-id/:id", authMiddleware, orderGetById);
+orderRouter.put("/order-update-by-id/:id", authMiddleware, orderUpdateById);
 
 export default orderRouter;
