@@ -1,6 +1,7 @@
 // Cravely / Admin / src / components /  FormInputs.jsx
 import { Controller } from "react-hook-form";
 import Select from "react-select";
+import { FiUpload } from "react-icons/fi";
 
 export const Input = ({
   label,
@@ -12,6 +13,8 @@ export const Input = ({
   errors,
   className = "",
   noFocusRing = false,
+  step,
+  min,
 }) => {
   const focusClasses = noFocusRing
     ? ""
@@ -20,7 +23,9 @@ export const Input = ({
   return (
     <div className="mb-4">
       {label && (
-        <label className="block text-sm font-medium text-black">{label}</label>
+        <label className="block mb-2 text-base sm:text-lg text-teal-400">
+          {label}
+        </label>
       )}
       <Controller
         name={name}
@@ -31,14 +36,16 @@ export const Input = ({
             <textarea
               {...field}
               placeholder={placeholder}
-              className={`mt-1 p-2 block w-full border border-gray-300 rounded-md placeholder-gray-400 resize-none ${focusClasses} ${className}`}
+              className={`w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100 resize-none ${focusClasses} ${className}`}
             />
           ) : (
             <input
               {...field}
               type={type}
               placeholder={placeholder}
-              className={`mt-1 p-2 block w-full border border-gray-300 rounded-md placeholder-gray-400 ${focusClasses} ${className}`}
+              step={step}
+              min={min}
+              className={`w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100 ${focusClasses} ${className}`}
             />
           )
         }
@@ -57,20 +64,24 @@ export const SelectInput = ({
   options = [],
   required = false,
   errors,
-  themeColor = "#14B8A6",
+  themeColor = "#0D9488",
   className = "",
 }) => {
   return (
     <div className={`mb-4 ${className}`}>
-      <label className="block text-sm font-medium text-black mb-1">
-        {label}
-      </label>
+      {label && (
+        <label className="block mb-2 text-base sm:text-lg text-teal-400">
+          {label}
+        </label>
+      )}
+
       <Controller
         name={name}
         control={control}
         rules={{ required }}
         render={({ field }) => (
           <Select
+            {...field}
             options={options}
             placeholder={`Select ${label}`}
             isSearchable
@@ -79,27 +90,44 @@ export const SelectInput = ({
             styles={{
               control: (base, state) => ({
                 ...base,
-                borderColor: state.isFocused ? themeColor : base.borderColor,
+                backgroundColor: "#2C2F3F",
+                borderColor: state.isFocused ? themeColor : "#0D948833",
                 boxShadow: state.isFocused
-                  ? `0 0 0 2px ${themeColor}33`
-                  : base.boxShadow,
+                  ? `0 0 0 2px rgba(13,148,136,0.2)`
+                  : "none",
+                borderRadius: "12px",
+                minHeight: "57px",
+                paddingLeft: "12px",
+                paddingRight: "12px",
+                cursor: "pointer",
                 "&:hover": { borderColor: themeColor },
+              }),
+              singleValue: (base) => ({ ...base, color: "#F0F9FF" }),
+              menu: (base) => ({
+                ...base,
+                backgroundColor: "#2C2F3F",
+                borderRadius: "12px",
+                zIndex: 50,
               }),
               option: (base, state) => ({
                 ...base,
                 backgroundColor: state.isFocused
-                  ? `${themeColor}33`
+                  ? "rgba(13,148,136,0.2)"
                   : state.isSelected
                     ? themeColor
-                    : base.backgroundColor,
-                color: state.isSelected ? "#fff" : "#000",
+                    : "#2C2F3F",
+                color: state.isSelected ? "#fff" : "#F0F9FF",
                 cursor: "pointer",
+                padding: "12px 16px",
               }),
-              singleValue: (base) => ({ ...base, color: "#000" }),
+              placeholder: (base) => ({ ...base, color: "#9CA3AF" }),
+              indicatorSeparator: () => ({ display: "none" }),
+              dropdownIndicator: (base) => ({ ...base, color: themeColor }),
             }}
           />
         )}
       />
+
       {errors && errors[name] && (
         <span className="text-red-500 text-sm mt-1">{label} is required</span>
       )}
@@ -114,25 +142,53 @@ export const FileInput = ({
   required = false,
   errors,
   onChange,
+  preview,
+  className = "",
 }) => {
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-black">{label}</label>
+      {label && (
+        <label className="block mb-2 text-sm font-medium text-teal-400">
+          {label}
+        </label>
+      )}
+
       <Controller
         name={name}
         control={control}
         rules={{ required }}
         render={({ field }) => (
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              field.onChange(file);
-              if (onChange && file) onChange(file);
-            }}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md cursor-pointer hover:border-gray-400"
-          />
+          <div className={`flex justify-center`}>
+            <label
+              className={`w-full max-w-xs sm:w-72 h-56 sm:h-72 bg-[#2C2F3F]/50 border border-dashed border-teal-500/30 rounded-2xl cursor-pointer flex items-center justify-center overflow-hidden hover:border-teal-400 transition-all ${className}`}
+            >
+              {preview ? (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="text-center p-4">
+                  <FiUpload className="text-3xl sm:text-4xl text-teal-500 mb-2 mx-auto animate-pulse" />
+                  <p className="text-teal-400 text-sm">
+                    Click to upload product
+                  </p>
+                </div>
+              )}
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  field.onChange(file);
+                  if (onChange && file) onChange(file);
+                }}
+              />
+            </label>
+          </div>
         )}
       />
       {errors && errors[name] && (
