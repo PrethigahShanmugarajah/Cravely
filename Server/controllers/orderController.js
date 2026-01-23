@@ -328,3 +328,39 @@ export const orderUpdateAnyByAdmin = async (req, res) => {
     });
   }
 };
+
+/* -------- Order Get By Id -------- */
+export const orderGetById = async (req, res) => {
+  try {
+    const order = await orderModel.findById(req.params.id);
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found." });
+    }
+
+    if (!order.user.equals(req.user._id)) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Order access denied." });
+    }
+
+    if (req.query.email && order.email !== req.query.email) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Order access denied." });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Order fetched successfully!", order });
+  } catch (error) {
+    console.error("Order Get By Id Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch order",
+      error: `Order Get By Id Error: ${error.message}`,
+    });
+  }
+};
