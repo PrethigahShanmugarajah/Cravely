@@ -4,10 +4,12 @@ import List from "./components/List/List";
 import Navbar from "./components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Order from "./components/Order/Order";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
     <div>
+      <ToastContainer />
       <Navbar />
       <Routes>
         <Route path="/" element={<AddItems />} />
