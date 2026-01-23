@@ -1,9 +1,10 @@
-// Craverly /  Cravely / src / App.jsx
+// Craverly /  Admin / src / App.jsx
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   return (
     <div>
-      <h1>App</h1>
+      <Navbar />
     </div>
   );
 };
