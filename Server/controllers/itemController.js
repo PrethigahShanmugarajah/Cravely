@@ -1,8 +1,8 @@
 // Cravely / Server / controllers / itemController.js
 import itemModel from "../models/itemModel.js";
 
-/* -------- Create Item -------- */
-export const createItem = async (req, res) => {
+/* -------- Item Create -------- */
+export const itemCreate = async (req, res) => {
   try {
     const { name, description, category, price, rating, hearts } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
@@ -30,18 +30,18 @@ export const createItem = async (req, res) => {
       return res.status(409).json({ message: "Item name already exists" });
     }
 
-    console.error("Create Item Error:", error.message);
+    console.error("Item Create Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Create Item",
-      error: `Create Item Error: ${error.message}`,
+      message: "Failed to create item",
+      error: `Item Create Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Get All Items -------- */
-export const getItems = async (req, res) => {
+/* -------- Item Get All -------- */
+export const itemGetAll = async (req, res) => {
   try {
     const items = await itemModel.find().sort({ createdAt: -1 });
     const host = `${req.protocol}://${req.get("host")}`;
@@ -64,18 +64,18 @@ export const getItems = async (req, res) => {
       items: withFullUrl,
     });
   } catch (error) {
-    console.error("Get All Items Error:", error.message);
+    console.error("Item Get All Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Get Items",
-      error: `Get All Items Error: ${error.message}`,
+      message: "Failed to fetch items",
+      error: `Item Get All Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Delete Item -------- */
-export const deleteItem = async (req, res) => {
+/* -------- Item Delete -------- */
+export const itemDelete = async (req, res) => {
   try {
     const removed = await itemModel.findByIdAndDelete(req.params.id);
     if (!removed) {
@@ -89,12 +89,12 @@ export const deleteItem = async (req, res) => {
       item: removed,
     });
   } catch (error) {
-    console.error("Delete Item Error:", error.message);
+    console.error("Item Delete Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Delete Item",
-      error: `Delete Item Error: ${error.message}`,
+      message: "Failed to delete item",
+      error: `Item Delete Error: ${error.message}`,
     });
   }
 };
