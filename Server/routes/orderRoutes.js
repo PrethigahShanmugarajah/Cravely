@@ -5,6 +5,7 @@ import {
   orderAdminGetAll,
   orderConfirmPayment,
   orderCreate,
+  orderGetById,
   ordersGet,
   orderUpdateAnyByAdmin,
 } from "../controllers/orderController.js";
@@ -16,5 +17,6 @@ orderRouter.get("/order-confirm-payment", authMiddleware, orderConfirmPayment);
 orderRouter.get("/order-get", authMiddleware, ordersGet);
 orderRouter.get("/order-admin-get-all", orderAdminGetAll);
 orderRouter.put("/order-update-any-by-admin/:id", orderUpdateAnyByAdmin);
+orderRouter.get("/order-get-by-id/:id", authMiddleware, orderGetById);
 
 export default orderRouter;
