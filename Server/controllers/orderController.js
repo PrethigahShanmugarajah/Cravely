@@ -5,8 +5,8 @@ import orderModel from "../models/orderModel.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-/* -------- Create Order -------- */
-export const createOrder = async (req, res) => {
+/* -------- Order Create -------- */
+export const orderCreate = async (req, res) => {
   try {
     const {
       firstName,
@@ -45,6 +45,34 @@ export const createOrder = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Items array cannot be empty." });
+    }
+
+    if (!["online", "cod"].includes(paymentMethod)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment method.",
+      });
+    }
+
+    if (typeof subtotal !== "number") {
+      return res.status(400).json({
+        success: false,
+        message: "Subtotal must be a number.",
+      });
+    }
+
+    if (typeof tax !== "number") {
+      return res.status(400).json({
+        success: false,
+        message: "Tax must be a number.",
+      });
+    }
+
+    if (typeof total !== "number") {
+      return res.status(400).json({
+        success: false,
+        message: "Total must be a number.",
+      });
     }
 
     const orderItems = items.map(
@@ -140,12 +168,12 @@ export const createOrder = async (req, res) => {
       checkoutUrl: null,
     });
   } catch (error) {
-    console.error("Create Order Error:", error.message);
+    console.error("Order Create Error:", error.message);
 
     return res.status(500).json({
       success: false,
       message: "Failed to create the order",
-      error: `Create Order Error: ${error.message}`,
+      error: `Order Create Error: ${error.message}`,
     });
   }
 };
