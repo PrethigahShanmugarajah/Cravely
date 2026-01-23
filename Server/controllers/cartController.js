@@ -36,10 +36,24 @@ export const addToCart = async (req, res) => {
   try {
     const { itemId, quantity } = req.body;
 
-    if (!itemId || typeof quantity !== "number") {
+    // if (!itemId || typeof quantity !== "number") {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "ItemId and quantity are required",
+    //   });
+    // }
+
+    if (!itemId) {
       return res.status(400).json({
         success: false,
-        message: "ItemId and quantity are required",
+        message: "ItemId is required",
+      });
+    }
+
+    if (typeof quantity !== "number") {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a number",
       });
     }
 
