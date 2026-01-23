@@ -2,9 +2,9 @@
 import express from "express";
 import multer from "multer";
 import {
-  createItem,
-  deleteItem,
-  getItems,
+  itemCreate,
+  itemDelete,
+  itemGetAll,
 } from "../controllers/itemController.js";
 import authMiddleware from "../middlewares/auth.js";
 
@@ -17,8 +17,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-itemRouter.post("/create", upload.single("image"), authMiddleware, createItem);
-itemRouter.get("/get", getItems);
-itemRouter.delete("/delete/:id", authMiddleware, deleteItem);
+itemRouter.post(
+  "/item-create",
+  upload.single("image"),
+  authMiddleware,
+  itemCreate,
+);
+itemRouter.get("/item-get-all", itemGetAll);
+itemRouter.delete("/item-delete/:id", authMiddleware, itemDelete);
 
 export default itemRouter;
