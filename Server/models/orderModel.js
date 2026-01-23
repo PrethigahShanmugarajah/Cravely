@@ -10,7 +10,7 @@ const orderItemSchema = new mongoose.Schema(
       },
 
       price: {
-        type: String,
+        type: Number,
         required: true,
         min: 0,
       },
@@ -132,7 +132,7 @@ const orderSchema = new mongoose.Schema({
     index: true,
   },
 
-  expextedDelivery: Date,
+  expectedDelivery: Date,
 
   deliveredAt: Date,
 
@@ -142,7 +142,7 @@ const orderSchema = new mongoose.Schema({
     index: true,
   },
 
-  createdAt: {
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
@@ -151,9 +151,13 @@ const orderSchema = new mongoose.Schema({
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ status: 1, paymentStatus: 1 });
 
-orderSchema.pre("save", function (next) {
+// orderSchema.pre("save", function (next) {
+//   this.updatedAt = new Date();
+//   next();
+// });
+
+orderSchema.pre("save", function () {
   this.updatedAt = new Date();
-  next();
 });
 
 const orderModel =
