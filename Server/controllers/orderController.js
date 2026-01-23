@@ -242,6 +242,7 @@ export const ordersGet = async (req, res) => {
       createdAt: o.createdAt,
       paymentStatus: o.paymentStatus,
     }));
+
     return res.status(200).json({
       success: true,
       message: "Order fetched successfully!",
@@ -340,15 +341,17 @@ export const orderGetById = async (req, res) => {
     }
 
     if (!order.user.equals(req.user._id)) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Order access denied." });
+      return res.status(403).json({
+        success: false,
+        message: "Order does not belong to the current user.",
+      });
     }
 
     if (req.query.email && order.email !== req.query.email) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Order access denied." });
+      return res.status(403).json({
+        success: false,
+        message: "Order email does not match the query email.",
+      });
     }
 
     return res
@@ -376,11 +379,19 @@ export const orderUpdateById = async (req, res) => {
     }
 
     if (!order.user.equals(req.user._id)) {
-      return res.status(403).json({ success: false, message: "Access Denied" });
+      return res.status(403).json({
+        success: false,
+        message: "Order does not belong to the current user.",
+      });
     }
 
     if (req.body.email && order.email !== req.body.email) {
-      return res.status(403).json({ success: false, message: "Access Denied" });
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Order email does not match the provided email.",
+        });
     }
 
     const updated = await orderModel.findByIdAndUpdate(
