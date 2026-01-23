@@ -6,6 +6,7 @@ import {
   orderConfirmPayment,
   orderCreate,
   ordersGet,
+  orderUpdateAnyByAdmin,
 } from "../controllers/orderController.js";
 
 const orderRouter = express.Router();
@@ -14,5 +15,6 @@ orderRouter.post("/order-create", authMiddleware, orderCreate);
 orderRouter.get("/order-confirm-payment", authMiddleware, orderConfirmPayment);
 orderRouter.get("/order-get", authMiddleware, ordersGet);
 orderRouter.get("/order-admin-get-all", orderAdminGetAll);
+orderRouter.put("/order-update-any-by-admin/:id", orderUpdateAnyByAdmin);
 
 export default orderRouter;
