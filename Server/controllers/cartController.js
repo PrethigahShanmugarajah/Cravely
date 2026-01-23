@@ -1,8 +1,8 @@
 // Cravely / Server / controllers / cartController.js
 import { CartItem } from "../models/cartModel.js";
 
-/* -------- Get Cart -------- */
-export const getCart = async (req, res) => {
+/* -------- Cart Get -------- */
+export const cartGet = async (req, res) => {
   try {
     const items = await CartItem.find({ user: req.user._id }).populate("item");
 
@@ -21,18 +21,18 @@ export const getCart = async (req, res) => {
       cartItems,
     });
   } catch (error) {
-    console.error("Get Cart Error:", error.message);
+    console.error("Cart Get Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Get Cart",
-      error: `Get Cart Error: ${error.message}`,
+      message: "Failed to fetch cart",
+      error: `Cart Get Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Add to Cart -------- */
-export const addToCart = async (req, res) => {
+/* -------- Cart Add -------- */
+export const cartAdd = async (req, res) => {
   try {
     const { itemId, quantity } = req.body;
 
@@ -110,18 +110,18 @@ export const addToCart = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Add to Cart Error:", error.message);
+    console.error("Cart Add Error:", error.message);
 
     return res.status(500).json({
       success: false,
       message: "Failed to add item to cart",
-      error: `Add to Cart Error: ${error.message}`,
+      error: `Cart Add Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Update Cart Item -------- */
-export const updateCartItem = async (req, res) => {
+/* -------- Cart Update Item -------- */
+export const cartUpdateItem = async (req, res) => {
   try {
     const { quantity } = req.body;
 
@@ -153,18 +153,18 @@ export const updateCartItem = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Update Cart Item Error:", error.message);
+    console.error("Cart Update Item Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Update Cart Items",
-      error: `Update Cart Items Error: ${error.message}`,
+      message: "Failed to update cart item",
+      error: `Cart Update Item Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Delete Cart Item -------- */
-export const deleteCartItem = async (req, res) => {
+/* -------- Cart Delete Item -------- */
+export const cartDeleteItem = async (req, res) => {
   try {
     const cartItem = await CartItem.findOne({
       _id: req.params.id,
@@ -190,18 +190,18 @@ export const deleteCartItem = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Delete Cart Item Error:", error.message);
+    console.error("Cart Delete Item Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Delete Cart Item",
-      error: `Delete Cart Item Error: ${error.message}`,
+      message: "Failed to delete cart item",
+      error: `Cart Delete Item Error: ${error.message}`,
     });
   }
 };
 
-/* -------- Clear Cart -------- */
-export const clearCart = async (req, res) => {
+/* -------- Cart Clear -------- */
+export const cartClear = async (req, res) => {
   try {
     const cartItems = await CartItem.find({ user: req.user._id });
 
@@ -220,12 +220,12 @@ export const clearCart = async (req, res) => {
       message: `Cart cleared successfully! ${result.deletedCount} item(s) removed!`,
     });
   } catch (error) {
-    console.error("Clear Cart Error:", error.message);
+    console.error("Cart Clear Error:", error.message);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to Clear Cart",
-      error: `Clear Cart Error: ${error.message}`,
+      message: "Failed to clear cart",
+      error: `Cart Clear Error: ${error.message}`,
     });
   }
 };
