@@ -17,12 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-itemRouter.post(
-  "/item-create",
-  upload.single("image"),
-  authMiddleware,
-  itemCreate,
-);
+itemRouter.post("/item-create", upload.single("image"), itemCreate);
 itemRouter.get("/item-get-all", itemGetAll);
 itemRouter.delete("/item-delete/:id", authMiddleware, itemDelete);
 
