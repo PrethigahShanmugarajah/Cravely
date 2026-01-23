@@ -299,3 +299,32 @@ export const orderAdminGetAll = async (req, res) => {
     });
   }
 };
+
+/* -------- Order Update Any By Admin -------- */
+export const orderUpdateAnyByAdmin = async (req, res) => {
+  try {
+    const updated = await orderModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true },
+    );
+
+    if (!updated) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found for the given ID." });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Order updated successfully!", updated });
+  } catch (error) {
+    console.error("Order Update Any By Admin Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update the order due to server error.",
+      error: `Order Update Any By Admin Error: ${error.message}`,
+    });
+  }
+};
