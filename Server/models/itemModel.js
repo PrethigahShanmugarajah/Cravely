@@ -12,7 +12,7 @@ const itemSchema = new mongoose.Schema(
     total: { type: String, default: 0 },
     imageUrl: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const itemModel = mongoose.models.item || mongoose.model("Item", itemSchema);
