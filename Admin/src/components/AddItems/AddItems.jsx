@@ -26,6 +26,7 @@ const AddItems = () => {
     handleSubmit,
     // formState: { errors },
     reset,
+    setValue,
   } = useForm({
     defaultValues: {
       name: "",
@@ -66,7 +67,11 @@ const AddItems = () => {
   //   }
   // };
 
-  const handleRating = (rating) => setFormData((prev) => ({ ...prev, rating }));
+  // const handleRating = (rating) => setFormData((prev) => ({ ...prev, rating }));
+  const handleRating = (rating) => {
+    setFormData((prev) => ({ ...prev, rating }));
+    setValue("rating", rating);
+  };
 
   const handleHearts = () =>
     setFormData((prev) => ({ ...prev, hearts: prev.hearts + 1 }));
@@ -83,12 +88,15 @@ const AddItems = () => {
 
       Object.entries(formValues).forEach(([key, val]) => {
         if (key === "preview" || key === "image") return;
+
+        if (["hearts", "rating", "price"].includes(key)) val = Number(val) || 0;
+
         payload.append(key, val);
       });
 
-      if (formData.image) {
-        payload.append("image", formData.image);
-      }
+      // payload.append("rating", Number(formData.rating) || 0);
+
+      if (formData.image) payload.append("image", formData.image);
 
       const { data } = await api.post(API_ROUTES.ITEM.ITEM_CREATE, payload, {
         headers: { "Content-Type": "multipart/form-data" },
