@@ -13,11 +13,11 @@ export const itemCreate = async (req, res) => {
       name,
       description,
       category,
-      price,
-      rating,
-      hearts,
+      price: Number(price),
+      rating: Number(rating),
+      hearts: Number(hearts),
       imageUrl,
-      total,
+      total: Number(total),
     });
 
     const item = await newItem.save();
