@@ -5,6 +5,7 @@ const API_ROUTES = {
   ITEM: {
     ITEM_CREATE: `${BASE_URL}/api/items/item-create`,
     ITEM_GET_ALL: `${BASE_URL}/api/items/item-get-all`,
+    ITEM_DELETE: (itemId) => `${BASE_URL}/api/items/item-delete/${itemId}`,
   },
 };
 export default API_ROUTES;
