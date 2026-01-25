@@ -2,18 +2,23 @@
 import { useEffect, useState } from "react";
 import {
   FaArrowRight,
-  FaCheckCircle,
   FaEye,
   FaEyeSlash,
   FaLock,
   FaUser,
   FaUserPlus,
 } from "react-icons/fa";
-import { iconClass, inputBase } from "../../assets/dummydata";
-import { Link } from "react-router-dom";
+import { inputBase } from "../../assets/dummydata";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/axios";
+import API_ROUTES from "../../api/api_route";
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from "../../utils/toast";
 
 const Login = ({ onLoginSuccess, onClose }) => {
-  const [showToast, setShowToast] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -21,19 +26,49 @@ const Login = ({ onLoginSuccess, onClose }) => {
     rememberMe: false,
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const stored = localStorage.getItem("loginData");
     if (stored) setFormData(JSON.parse(stored));
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    formData.rememberMe
-      ? localStorage.setItem("loginData", JSON.stringify(formData))
-      : localStorage.removeItem("loginData");
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-    onLoginSuccess();
+
+    try {
+      const { data } = await api.post(API_ROUTES.USER.USER_LOGIN, {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      console.log("User Login API Response:", data);
+
+      if (data.success && data.token) {
+        localStorage.setItem("authToken", data.token);
+
+        formData.rememberMe
+          ? localStorage.setItem("loginData", JSON.stringify(formData))
+          : localStorage.removeItem("loginData");
+
+        showSuccessToast(data.message);
+
+        setTimeout(() => {
+          onLoginSuccess(data.token);
+          navigate("/");
+        }, 2000);
+
+        console.log("User Login Success:", data.message);
+
+        navigate("/");
+      } else {
+        showWarningToast(data.message);
+        console.log("User Login Data Error:", data.message);
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || error?.message);
+      console.log("User Login Error:", error);
+    }
   };
 
   const handleChange = ({ target: { name, value, type, checked } }) =>
@@ -46,32 +81,21 @@ const Login = ({ onLoginSuccess, onClose }) => {
 
   return (
     <div className="space-y-6 relative">
-      <div
-        className={`fixed top-4 right-4 transition-all duration-300 ${
-          showToast ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
-        }`}
-      >
-        <div className="bg-green-600 text-white px-4 py-3 rounded-md shadow-lg flex items-center gap-2 text-sm">
-          <FaCheckCircle className="shrink-0" />
-          <span>Login Successfully!</span>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
-          <FaUser className={iconClass} />
+          <FaUser className="absolute top-1/2 transform -translate-y-1/2 left-3 text-teal-400" />
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
             onChange={handleChange}
             className={`${inputBase} pl-10 pr-4 py-3`}
           />
         </div>
 
         <div className="relative">
-          <FaLock className={iconClass} />
+          <FaLock className="absolute top-1/2 transform -translate-y-1/2 left-3 text-teal-400" />
           <input
             type={showPassword ? "text" : "password"}
             name="password"
