@@ -137,8 +137,7 @@ export const cartUpdateItem = async (req, res) => {
       });
     }
 
-    // cartItem.quantity = Math.max(1, quantity);
-    cartItem.quantity = Math.max(1, cartItem.quantity + quantity);
+    cartItem.quantity = Math.max(1, quantity);
 
     await cartItem.save();
     await cartItem.populate("item");
