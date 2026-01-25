@@ -1,10 +1,11 @@
 // Craverly / Client / src / components / OurHomeMenu / OurHomeMenu.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../../CartContext/CartContext";
-import { dummyMenuData } from "../../assets/OmhDD";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./OurHomeMenu.css";
+import api from "../../api/axios";
+import API_ROUTES from "../../api/api_route";
 
 const categories = [
   "Breakfast",
@@ -17,12 +18,41 @@ const categories = [
 
 const OurHomeMenu = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [menuData, setMenuData] = useState({});
+  const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
 
-  const displayItems = dummyMenuData[activeCategory] || [].slice(0, 4);
+  useEffect(() => {
+    api
+      .get(API_ROUTES.ITEM.ITEM_GET_ALL)
+      .then((res) => {
+        const items = res.data.items; // get the array
+        const grouped = items.reduce((acc, item) => {
+          acc[item.category] = acc[item.category] || [];
+          acc[item.category].push(item);
+          return acc;
+        }, {});
+        setMenuData(grouped);
+      })
+      .catch(console.error);
+  }, []);
 
-  const { cartItems, addToCart, removeFromCart } = useCart();
+  // useEffect(() => {
+  //   api
+  //     .get(API_ROUTES.ITEM.ITEM_GET_ALL)
+  //     .then((res) => {
+  //       const grouped = res.data.reduce((acc, item) => {
+  //         acc[item.category] = acc[item.category] || [];
+  //         acc[item.category].push(item);
+  //         return acc;
+  //       }, {});
+  //       setMenuData(grouped);
+  //     })
+  //     .catch(console.error);
+  // }, []);
 
-  const getQuantity = (id) => cartItems.find((i) => i.id === id)?.quantity || 0;
+  const getCartEntry = (id) => cartItems.find((ci) => ci.item._id === id);
+  const getQuantity = (id) => getCartEntry(id)?.quantity || 0;
+  const displayItems = (menuData[activeCategory] || []).slice(0, 4);
 
   return (
     <div className="bg-linear-to-br from-[#111827] via-[#1F2937] to-[#293548] min-h-screen py-16 px-4 sm:px-6 lg:px-8">
@@ -55,16 +85,18 @@ const OurHomeMenu = () => {
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
           {displayItems.map((item, i) => {
-            const quantity = getQuantity(item.id);
+            const qty = getQuantity(item._id);
+            const cartEntry = getCartEntry(item._id);
+
             return (
               <div
-                key={item.id}
+                key={item._id}
                 className="relative bg-teal-900/20 rounded-2xl overflow-hidden border border-teal-800/30 backdrop-blur-sm flex flex-col transition-all duration-300"
                 style={{ "--index": i }}
               >
                 <div className="relative h-48 sm:h-56 md:h-60 flex items-center justify-center bg-black/10">
                   <img
-                    src={item.image}
+                    src={item.imageUrl}
                     alt={item.name}
                     className="max-h-full object-contain transition-all duration-700 cursor-pointer"
                   />
@@ -83,38 +115,50 @@ const OurHomeMenu = () => {
                   <div className="mt-auto flex items-center gap-4 justify-between">
                     <div className="bg-teal-100/10 backdrop-blur-sm px-3 py-1 rounded-2xl shadow-lg">
                       <span className="text-xl font-bold text-teal-300 font-dancingscript">
-                        ${item.price}
+                        ${Number(item.price).toFixed(2)}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      {quantity > 0 ? (
+                      {qty > 0 ? (
                         <>
                           <button
                             className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-colors cursor-pointer"
-                            onClick={() =>
-                              quantity > 1
-                                ? addToCart(item, quantity - 1)
-                                : removeFromCart(item.id)
-                            }
+                            onClick={() => {
+                              console.log("Before decrease:", qty);
+                              qty > 1
+                                ? updateQuantity(cartEntry._id, qty - 1)
+                                : removeFromCart(cartEntry._id);
+                              console.log(
+                                "After decrease:",
+                                qty > 1 ? qty - 1 : 0,
+                              );
+                            }}
                           >
                             <FaMinus className="text-teal-100" />
                           </button>
 
                           <span className="w-8 text-center text-teal-100">
-                            {quantity}
+                            {qty}
                           </span>
 
                           <button
                             className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-colors cursor-pointer"
-                            onClick={() => addToCart(item, quantity + 1)}
+                            onClick={() => {
+                              console.log("Before increase:", qty);
+                              updateQuantity(cartEntry._id, qty + 1);
+                              console.log("After increase:", qty + 1);
+                            }}
                           >
                             <FaPlus className="text-teal-100" />
                           </button>
                         </>
                       ) : (
                         <button
-                          onClick={() => addToCart(item, 1)}
+                          onClick={() => {
+                            console.log("Add to cart clicked, qty: 1");
+                            addToCart(item, 1);
+                          }}
                           className="bg-teal-900/40 px-4 py-1.5 rounded-full font-cinzel text-xs uppercase sm:text-sm tracking-wider transition-transform duration-300 hover:scale-110 hover:shadow-lg hover:shadow-teal-900/20 relative overflow-hidden border border-teal-800/50 cursor-pointer"
                         >
                           <span className="relative z-10 text-xs text-black">
