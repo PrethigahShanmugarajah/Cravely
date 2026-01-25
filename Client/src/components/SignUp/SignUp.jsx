@@ -1,17 +1,16 @@
 // Craverly / Client / src / components / SignUp / SignUp.jsx
-import { useEffect, useState } from "react";
-import { FaArrowLeft, FaCheckCircle, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
+import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
-const AwesomeToast = ({ message, icon }) => (
-  <div className="animate-slide-in fixed bottom-6 right-6 flex items-center bg-linear-to-br from-teal-500 to-teal-600 px-6 py-4 rounded-lg shadow-lg border-2 border-teal-300/20">
-    <span className="text-2xl mr-3 text-[#0F172A]">{icon}</span>
-    <span className="font-semibold text-[#0F172A]">{message}</span>
-  </div>
-);
+import api from "../../api/axios";
+import API_ROUTES from "../../api/api_route";
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from "../../utils/toast";
 
 const SignUp = () => {
-  const [showToast, setShowToast] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -21,21 +20,26 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  /* -------- For Toast -------- */
-  useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-        navigate("/login");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [showToast, navigate]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Sign Up Data:", formData);
-    setShowToast(true);
+    try {
+      const { data } = await api.post(API_ROUTES.USER.USER_REGISTER, formData);
+      console.log("User Register API Response:", data);
+
+      if (data.success && data.token) {
+        localStorage.setItem("authToken", data.token);
+        showSuccessToast(data.message);
+        console.log("User Register Success:", data.message);
+        navigate("/");
+      } else {
+        showWarningToast(data.message);
+        console.log("User Register Data Error:", data.message);
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || error?.message);
+      console.log("User Register Error:", error);
+    }
   };
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
@@ -45,13 +49,6 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#111827] p-4">
-      {showToast && (
-        <AwesomeToast
-          message="Sign Up Successfully!"
-          icon={<FaCheckCircle />}
-        />
-      )}
-
       <div className="w-full max-w-md bg-linear-to-br from-[#0F172A] to-[#1E293B] p-8 rounded-xl shadow-lg border-4 border-teal-700/30 transform transition-all duration-300 hover:shadow-2xl">
         <h1 className="text-3xl font-bold text-center bg-linear-to-r from-teal-400 to-teal-600 bg-clip-text text-transparent mb-6 hover:scale-105 transition-transform">
           Create an account
@@ -92,7 +89,7 @@ const SignUp = () => {
             <button
               type="button"
               onClick={toggleShowPassword}
-              className="absolute inset-y-0 right-4 flex items-center text-teal-400 hover:text-teal-600 transition-all transform hover:scale-125"
+              className="absolute inset-y-0 right-4 flex items-center text-teal-400 hover:text-teal-600 transition-all transform hover:scale-125 cursor-pointer"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
