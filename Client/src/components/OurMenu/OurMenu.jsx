@@ -1,10 +1,12 @@
 // Craverly / Client / src / components / OurMenu / OurMenu.jsx
 import { useState } from "react";
 import { useCart } from "../../CartContext/CartContext";
-import { dummyMenuData } from "../../assets/OmDD";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import "./OurMenu.css";
+import api from "../../api/axios";
+import API_ROUTES from "../../api/api_route";
+import { useEffect } from "react";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const categories = [
   "Breakfast",
@@ -17,12 +19,74 @@ const categories = [
 
 const OurMenu = () => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [menuData, setMenuData] = useState({});
+  const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
 
-  const displayItems = dummyMenuData[activeCategory] || [].slice(0, 4);
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const { data } = await api.get(API_ROUTES.ITEM.ITEM_GET_ALL);
 
-  const { cartItems, addToCart, removeFromCart } = useCart();
+        console.log("Fetch Menu API Response:", data);
 
-  const getQuantity = (id) => cartItems.find((i) => i.id === id)?.quantity || 0;
+        if (data?.success && Array.isArray(data.items)) {
+          const byCategory = {};
+
+          data.items.forEach((item) => {
+            const cat = item.category || "Uncategorized";
+
+            if (!byCategory[cat]) {
+              byCategory[cat] = [];
+            }
+
+            byCategory[cat].push(item);
+          });
+
+          setMenuData(byCategory);
+          // showSuccessToast(data.message);
+          console.log("Fetch Menu Success:", data.message);
+        } else {
+          showWarningToast(data?.message);
+          console.log("Fetch Menu Data Error:", data.message);
+
+          setMenuData({});
+        }
+      } catch (error) {
+        showErrorToast(error?.response?.data?.message);
+        console.error("Fetch Menu Error:", error);
+      }
+    };
+
+    fetchMenu();
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchMenu = async () => {
+  //     try {
+  //       const { data } = await api.get(API_ROUTES.ITEM.ITEM_GET_ALL);
+
+  //       const byCategory = Array.isArray(data.items)
+  //         ? data.items.reduce((acc, item) => {
+  //             const cat = item.category || "Uncategorized";
+  //             acc[cat] = acc[cat] || [];
+  //             acc[cat].push(item);
+  //             return acc;
+  //           }, {})
+  //         : {};
+
+  //       setMenuData(byCategory);
+  //     } catch (error) {
+  //       console.error("Fetch Menu Error:", error);
+  //     }
+  //   };
+
+  //   fetchMenu();
+  // }, []);
+
+  const getCartEntry = (id) => cartItems.find((ci) => ci.item._id === id);
+  const getQuantity = (id) => getCartEntry(id)?.quantity || 0;
+
+  const displayItems = (menuData[activeCategory] ?? []).slice(0, 12);
 
   return (
     <div className="bg-linear-to-br from-[#111827] via-[#1F2937] to-[#293548] min-h-screen py-16 px-4 sm:px-6 lg:px-8">
@@ -55,16 +119,18 @@ const OurMenu = () => {
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
           {displayItems.map((item, i) => {
-            const quantity = getQuantity(item.id);
+            const cartEntry = getCartEntry(item._id);
+
+            const quantity = cartEntry?.quantity || 0;
             return (
               <div
-                key={item.id}
+                key={item._id}
                 className="relative bg-teal-900/20 rounded-2xl overflow-hidden border border-teal-800/30 backdrop-blur-sm flex flex-col transition-all duration-300"
                 style={{ "--index": i }}
               >
                 <div className="relative h-48 sm:h-56 md:h-60 flex items-center justify-center bg-black/10">
                   <img
-                    src={item.image}
+                    src={item.imageUrl || item.image}
                     alt={item.name}
                     className="max-h-full object-contain transition-all duration-700 cursor-pointer"
                   />
@@ -83,7 +149,7 @@ const OurMenu = () => {
                   <div className="mt-auto flex items-center gap-4 justify-between">
                     <div className="bg-teal-100/10 backdrop-blur-sm px-3 py-1 rounded-2xl shadow-lg">
                       <span className="text-xl font-bold text-teal-300 font-dancingscript">
-                        ${item.price}
+                        ${Number(item.price).toFixed(2)}
                       </span>
                     </div>
 
@@ -94,8 +160,8 @@ const OurMenu = () => {
                             className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-colors cursor-pointer"
                             onClick={() =>
                               quantity > 1
-                                ? addToCart(item, quantity - 1)
-                                : removeFromCart(item.id)
+                                ? updateQuantity(cartEntry._id, quantity - 1)
+                                : removeFromCart(cartEntry._id)
                             }
                           >
                             <FaMinus className="text-teal-100" />
@@ -107,7 +173,9 @@ const OurMenu = () => {
 
                           <button
                             className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-colors cursor-pointer"
-                            onClick={() => addToCart(item, quantity + 1)}
+                            onClick={() =>
+                              updateQuantity(cartEntry._id, quantity + 1)
+                            }
                           >
                             <FaPlus className="text-teal-100" />
                           </button>
