@@ -165,13 +165,38 @@ export const CartProvider = ({ children }) => {
   const removeFromCart = useCallback(async (_id) => {
     const token = localStorage.getItem("authToken");
 
-    await api.delete(API_ROUTES.CART.CART_DELETE_ITEM(_id), {
-      withCredentials: true,
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      const { data } = await api.delete(API_ROUTES.CART.CART_DELETE_ITEM(_id), {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    dispatch({ type: "REMOVE_ITEM", payload: _id });
+      console.log("Remove Cart Item API Response:", data);
+
+      if (data?.success) {
+        dispatch({ type: "REMOVE_ITEM", payload: _id });
+        showSuccessToast(data.message);
+        console.log("Remove Cart Item Success:", data.message);
+      } else {
+        showWarningToast(data?.message);
+        console.log("Remove Cart Item Data Error:", data?.message);
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message);
+      console.error("Remove Cart Item Error:", error);
+    }
   }, []);
+
+  // const removeFromCart = useCallback(async (_id) => {
+  //   const token = localStorage.getItem("authToken");
+
+  //   await api.delete(API_ROUTES.CART.CART_DELETE_ITEM(_id), {
+  //     withCredentials: true,
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   });
+
+  //   dispatch({ type: "REMOVE_ITEM", payload: _id });
+  // }, []);
 
   const updateQuantity = useCallback(async (_id, qty) => {
     const token = localStorage.getItem("authToken");
