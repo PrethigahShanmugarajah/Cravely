@@ -21,7 +21,6 @@ connectDB();
 
 /* -------- MIDDLEWARE CONFIGURATION -------- */
 app.use(express.json());
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use(
@@ -71,4 +70,3 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
