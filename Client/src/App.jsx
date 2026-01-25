@@ -12,10 +12,20 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import VerifyPaymentPage from "./pages/VerifyPaymentPage/VerifyPaymentPage";
 import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
 import MyOrderPage from "./pages/MyOrderPage/MyOrderPage";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar
+        closeOnClick
+        pauseOnHover
+        draggable={false}
+      />
+
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
