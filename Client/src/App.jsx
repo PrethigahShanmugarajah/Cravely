@@ -9,6 +9,9 @@ import Cart from "./pages/Cart/Cart";
 import SignUp from "./components/SignUp/SignUp";
 import Footer from "./components/Footer/Footer";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import VerifyPaymentPage from "./pages/VerifyPaymentPage/VerifyPaymentPage";
+import CheckoutPage from "./pages/CheckoutPage/CheckoutPage";
+import MyOrderPage from "./pages/MyOrderPage/MyOrderPage";
 
 const App = () => {
   return (
@@ -21,11 +24,28 @@ const App = () => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/login" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/myorder/verify" element={<VerifyPaymentPage />} />
         <Route
           path="/cart"
           element={
             <PrivateRoute>
               <Cart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <PrivateRoute>
+              <CheckoutPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/myorder"
+          element={
+            <PrivateRoute>
+              <MyOrderPage />
             </PrivateRoute>
           }
         />
