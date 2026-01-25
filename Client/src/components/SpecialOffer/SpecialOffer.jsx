@@ -1,8 +1,6 @@
 // Craverly / Client / src / components / SpecialOffer / SpecialOffer.jsx
 import { useState } from "react";
 import {
-  cardData,
-  additionalData,
   addButtonBase,
   addButtonHover,
   commonTransition,
@@ -11,13 +9,55 @@ import { useCart } from "../../CartContext/CartContext";
 import { FaFire, FaHeart, FaPlus, FaStar } from "react-icons/fa";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import FloatingParticle from "../FloatingParticle/FloatingParticle";
+import api from "../../api/axios";
+import API_ROUTES from "../../api/api_route";
+import { useEffect } from "react";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const SpecialOffer = () => {
   const [showAll, setShowAll] = useState(false);
-
-  const initialData = [...cardData, ...additionalData];
-
+  const [items, setItems] = useState([]);
   const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
+
+  useEffect(() => {
+    const fetchSpecialOfferItems = async () => {
+      try {
+        const { data } = await api.get(API_ROUTES.ITEM.ITEM_GET_ALL);
+
+        console.log("Fetch Special Offer Items API Response:", data);
+
+        if (data?.success && Array.isArray(data.items)) {
+          setItems(data.items);
+
+          // showSuccessToast(data.message);
+          console.log("Fetch Special Offer Items Success:", data.message);
+        } else {
+          showWarningToast(data?.message);
+          console.log("Fetch Special Offer Items Data Error:", data?.message);
+
+          setItems([]);
+        }
+      } catch (error) {
+        showErrorToast(error?.response?.data?.message);
+        console.error("Fetch Special Offer Items Error:", error);
+
+        setItems([]);
+      }
+    };
+
+    fetchSpecialOfferItems();
+  }, []);
+
+  // useEffect(() => {
+  //   api
+  //     .get(API_ROUTES.ITEM.ITEM_GET_ALL)
+  //     .then((res) => setItems(res.data.items ?? res.data))
+  //     .catch((err) => console.error(err));
+  // }, []);
+
+  const displayList = Array.isArray(items)
+    ? items.slice(0, showAll ? 8 : 4)
+    : [];
 
   return (
     <div className="bg-linear-to-b from-[#1C1B1F] to-[#27272A] text-white py-16 px-4 font-[Poppins]">
@@ -38,110 +78,98 @@ const SpecialOffer = () => {
 
         {/* -------- Production Card -------- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 cursor-pointer">
-          {(showAll ? initialData : initialData.slice(0, 4)).map(
-            (item, index) => {
-              const cartItem = cartItems.find((ci) => ci.id === item.id);
-              const quantity = cartItem ? cartItem.quantity : 0;
+          {displayList.map((item) => {
+            const cartItem = cartItems.find((ci) => ci.item._id === item._id);
+            const qty = cartItem ? cartItem.quantity : 0;
+            const cartId = cartItem?._id;
 
-              return (
-                <div
-                  key={`${item.id}-${index}`}
-                  className="relative group bg-[#3F3F46] rounded-3xl overflow-hidden shadow-2xl transform hover:-translate-y-4 transition-all duration-500 hover:shadow-slate-900/40 border-2 border-transparent hover:border-teal-500/20 before:absolute before:inset-0 hover:before:opacity-20"
-                >
-                  <div className="relative h-72 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover brightness-90 group-hover:brightness-110 transition-all duration-500"
-                    />
+            return (
+              <div
+                key={item._id}
+                className="relative group bg-[#3F3F46] rounded-3xl overflow-hidden shadow-2xl transform hover:-translate-y-4 transition-all duration-500 hover:shadow-slate-900/40 border-2 border-transparent hover:border-teal-500/20 before:absolute before:inset-0 hover:before:opacity-20"
+              >
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="w-full h-full object-cover brightness-90 group-hover:brightness-110 transition-all duration-500"
+                  />
 
-                    <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/90" />
+                  <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/90" />
 
-                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full">
-                      <span className="flex items-center gap-2 text-teal-400">
-                        <FaStar className="text-xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]" />
-                        <span className="font-bold">{item.rating}</span>
-                      </span>
+                  <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full">
+                    <span className="flex items-center gap-2 text-teal-400">
+                      <FaStar className="text-xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]" />
+                      <span className="font-bold">{item.rating}</span>
+                    </span>
 
-                      <span className="flex items-center gap-2 text-red-500">
-                        <FaHeart className="text-xl animate-heartbeat" />
-                        <span className="font-bold">{item.hearts}</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-6 relative z-10">
-                    <h3 className="text-2xl font-bold mb-2 bg-linear-to-r from-teal-300 to-teal-500 bg-clip-text text-transparent font-[Playfair_Display] italic">
-                      {item.title}
-                    </h3>
-
-                    <p className="text-gray-300 mb-5 text-sm leading-relaxed tracking-wide">
-                      {item.description}
-                    </p>
-
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-2xl font-bold text-teal-400 flex-1">
-                        {item.price}
-                      </span>
-
-                      {cartItem ? (
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => {
-                              quantity > 1
-                                ? updateQuantity(item.id, quantity - 1)
-                                : removeFromCart(item.id);
-                            }}
-                            className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
-                          >
-                            <HiMinus className="w-4 h-4 text-teal-100" />
-                          </button>
-                          <span className="w-8 text-center text-teal-100 font-cinzel">
-                            {quantity}
-                          </span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, quantity + 1)
-                            }
-                            className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
-                          >
-                            <HiPlus className="w-4 h-4 text-teal-100" />
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() =>
-                            addToCart(
-                              {
-                                ...item,
-                                name: item.title,
-                                price: parseFloat(
-                                  item.price.replace("LKR", "")
-                                ),
-                              },
-                              1
-                            )
-                          }
-                          className={`${addButtonBase} ${addButtonHover} ${commonTransition} cursor-pointer`}
-                        >
-                          <div className="absolute inset-0 bg-linear-to-r from-teal-500/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
-
-                          <FaPlus className="text-lg transition-transform" />
-                          <span className="relative z-10">Add</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="absolute inset-0 rounded-3xl pointer-events-none border-2 border-transparent group-hover:border-teal-500/30 transition-all duration-500">
-                    <div className="opacity-0 group-hover:opacity-100">
-                      <FloatingParticle />
-                    </div>
+                    <span className="flex items-center gap-2 text-red-500">
+                      <FaHeart className="text-xl animate-heartbeat" />
+                      <span className="font-bold">{item.hearts}</span>
+                    </span>
                   </div>
                 </div>
-              );
-            }
-          )}
+
+                <div className="p-6 relative z-10">
+                  <h3 className="text-2xl font-bold mb-2 bg-linear-to-r from-teal-300 to-teal-500 bg-clip-text text-transparent font-[Playfair_Display] italic">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-gray-300 mb-5 text-sm leading-relaxed tracking-wide">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-2xl font-bold text-teal-400 flex-1">
+                      {Number(item.price).toFixed(2)}
+                    </span>
+
+                    {qty > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            qty > 1
+                              ? updateQuantity(cartId, qty - 1)
+                              : removeFromCart(cartId);
+                          }}
+                          className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
+                        >
+                          <HiMinus className="w-4 h-4 text-teal-100" />
+                        </button>
+
+                        <span className="w-8 text-center text-teal-100 font-cinzel">
+                          {qty}
+                        </span>
+
+                        <button
+                          onClick={() => updateQuantity(cartId, qty + 1)}
+                          className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
+                        >
+                          <HiPlus className="w-4 h-4 text-teal-100" />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => addToCart(item, 1)}
+                        className={`${addButtonBase} ${addButtonHover} ${commonTransition} cursor-pointer`}
+                      >
+                        <div className="absolute inset-0 bg-linear-to-r from-teal-500/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+
+                        <FaPlus className="text-lg transition-transform" />
+                        <span className="relative z-10">Add</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-3xl pointer-events-none border-2 border-transparent group-hover:border-teal-500/30 transition-all duration-500">
+                  <div className="opacity-0 group-hover:opacity-100">
+                    <FloatingParticle />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div className="mt-12 flex justify-center">
