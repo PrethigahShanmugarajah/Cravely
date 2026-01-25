@@ -13,5 +13,8 @@ const API_ROUTES = {
     USER_REGISTER: `${BASE_URL}/api/user/user-register`,
     USER_LOGIN: `${BASE_URL}/api/user/user-login`,
   },
+  ITEM: {
+    ITEM_GET_ALL: `${BASE_URL}/api/items/item-get-all`,
+  },
 };
 export default API_ROUTES;
