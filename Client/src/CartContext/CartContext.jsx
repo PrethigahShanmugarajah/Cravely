@@ -8,6 +8,11 @@ import {
 } from "react";
 import api from "../../../Admin/src/api/axios";
 import API_ROUTES from "../api/api_route";
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from "../utils/toast";
 
 const CartContext = createContext();
 
@@ -63,39 +68,99 @@ export const CartProvider = ({ children }) => {
 
   /* ---- Initatlize Cart From Local Storage ---- */
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const fetchCart = async () => {
+      const token = localStorage.getItem("authToken");
 
-    api
-      .get(API_ROUTES.CART.CART_GET, {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      // .then((res) => dispatch({ type: "HYDRATE_CART", payload: res.data }))
-      .then((res) => {
-        const cartArray = Array.isArray(res.data.cartItems)
-          ? res.data.cartItems
-          : [];
-        dispatch({ type: "HYDRATE_CART", payload: cartArray });
-      })
-      .catch((error) => {
-        if (error.response?.status !== 401) console.error(error);
-        dispatch({ type: "HYDRATE_CART", payload: [] }); // fallback
-      });
+      try {
+        const { data } = await api.get(API_ROUTES.CART.CART_GET, {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Fetch Cart API Response:", data);
+
+        if (data.success && (Array.isArray(data.cartItems) || data.cartItems)) {
+          // showSuccessToast(data.message);
+          console.log("Fetch Cart Success:", data.message);
+
+          const cartArray = Array.isArray(data.cart) ? data.cart : [];
+          dispatch({ type: "HYDRATE_CART", payload: cartArray });
+        } else {
+          showWarningToast(data.message);
+          console.log("Fetch Cart Data Error:", data.message);
+        }
+      } catch (error) {
+        showErrorToast(error?.response?.data?.message || error?.message);
+        console.error("Fetch Cart Error:", error);
+      }
+    };
+
+    fetchCart();
   }, []);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("authToken");
+
+  //   api
+  //     .get(API_ROUTES.CART.CART_GET, {
+  //       withCredentials: true,
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //     // .then((res) => dispatch({ type: "HYDRATE_CART", payload: res.data }))
+  //     .then((res) => {
+  //       const cartArray = Array.isArray(res.data)
+  //         ? res.data
+  //         : res.data.cart || [];
+  //       dispatch({ type: "HYDRATE_CART", payload: cartArray });
+  //     })
+  //     .catch((error) => {
+  //       if (error.response?.status !== 401) console.error(error);
+  //     });
+  // }, []);
 
   /* ---- Dispatcher Wrapped With useCallback for Performance ---- */
   const addToCart = useCallback(async (item, qty) => {
     const token = localStorage.getItem("authToken");
 
-    const res = await api.post(
-      API_ROUTES.CART.CART_ADD,
-      { itemId: item._id, quantity: qty },
-      { withCredentials: true, headers: { Authorization: `Bearer ${token}` } },
-    );
+    try {
+      const { data } = await api.post(
+        API_ROUTES.CART.CART_ADD,
+        { itemId: item._id, quantity: qty },
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-    // dispatch({ type: "ADD_ITEM", payload: res.data });
-    dispatch({ type: "ADD_ITEM", payload: res.data.item });
+      console.log("Add to Cart API Response:", data);
+
+      if (data.success && data.item) {
+        showSuccessToast(data.message);
+        console.log("Add to Cart Success:", data.message);
+
+        dispatch({ type: "ADD_ITEM", payload: data.item });
+      } else {
+        showWarningToast(data.message);
+        console.log("Add to Cart Data Error:", data.message);
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || error?.message);
+      console.error("Add to Cart Error:", error);
+    }
   }, []);
+
+  // const addToCart = useCallback(async (item, qty) => {
+  //   const token = localStorage.getItem("authToken");
+
+  //   const res = await api.post(
+  //     API_ROUTES.CART.CART_ADD,
+  //     { itemId: item._id, quantity: qty },
+  //     { withCredentials: true, headers: { Authorization: `Bearer ${token}` } },
+  //   );
+
+  //   // dispatch({ type: "ADD_ITEM", payload: res.data });
+  //   dispatch({ type: "ADD_ITEM", payload: res.data.item });
+  // }, []);
 
   const removeFromCart = useCallback(async (_id) => {
     const token = localStorage.getItem("authToken");
@@ -111,18 +176,48 @@ export const CartProvider = ({ children }) => {
   const updateQuantity = useCallback(async (_id, qty) => {
     const token = localStorage.getItem("authToken");
 
-    await api.put(
-      API_ROUTES.CART.CART_UPDATE_ITEM(_id),
-      { quantity: qty },
-      {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
+    try {
+      const { data } = await api.put(
+        API_ROUTES.CART.CART_UPDATE_ITEM(_id),
+        { quantity: qty },
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
-    // dispatch({ type: "UPDATE_ITEM", payload: res.data });
-    dispatch({ type: "UPDATE_ITEM", payload: res.data.item });
+      console.log("Update Quantity API Response:", data);
+
+      if (data.success && data.item) {
+        // showSuccessToast(data.message);
+        console.log("Update Quantity Success:", data.message);
+
+        dispatch({ type: "UPDATE_ITEM", payload: data.item });
+      } else {
+        showWarningToast(data.message);
+        console.log("Update Quantity Data Error:", data.message);
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || error?.message);
+      console.error("Update Quantity Error:", error);
+    }
   }, []);
+
+  // const updateQuantity = useCallback(async (_id, qty) => {
+  //   const token = localStorage.getItem("authToken");
+
+  //   const res = await api.put(
+  //     API_ROUTES.CART.CART_UPDATE_ITEM(_id),
+  //     { quantity: qty },
+  //     {
+  //       withCredentials: true,
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     },
+  //   );
+
+  //   // dispatch({ type: "UPDATE_ITEM", payload: res.data });
+  //   dispatch({ type: "UPDATE_ITEM", payload: res.data.item });
+  // }, []);
 
   const clearCart = useCallback(async () => {
     const token = localStorage.getItem("authToken");
