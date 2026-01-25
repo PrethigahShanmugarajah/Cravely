@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import "./OurHomeMenu.css";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const categories = [
   "Breakfast",
@@ -22,18 +23,33 @@ const OurHomeMenu = () => {
   const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
 
   useEffect(() => {
-    api
-      .get(API_ROUTES.ITEM.ITEM_GET_ALL)
-      .then((res) => {
-        const items = res.data.items; // get the array
-        const grouped = items.reduce((acc, item) => {
-          acc[item.category] = acc[item.category] || [];
-          acc[item.category].push(item);
-          return acc;
-        }, {});
-        setMenuData(grouped);
-      })
-      .catch(console.error);
+    const fetchItems = async () => {
+      try {
+        const { data } = await api.get(API_ROUTES.ITEM.ITEM_GET_ALL);
+
+        console.log("Fetch Items API Response:", data);
+
+        if (data.success && Array.isArray(data.items)) {
+          const grouped = data.items.reduce((acc, item) => {
+            acc[item.category] = acc[item.category] || [];
+            acc[item.category].push(item);
+            return acc;
+          }, {});
+
+          setMenuData(grouped);
+          // showSuccessToast(data.message);
+          console.log("Fetch Items Success:", data.message);
+        } else {
+          showWarningToast(data.message);
+          console.warn("Fetch Items Data Error:", data.message);
+        }
+      } catch (error) {
+        showErrorToast(error?.response?.data?.message || error?.message);
+        console.error("Fetch Items Error:", error);
+      }
+    };
+
+    fetchItems();
   }, []);
 
   // useEffect(() => {
