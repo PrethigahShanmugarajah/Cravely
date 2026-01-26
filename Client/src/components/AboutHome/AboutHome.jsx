@@ -1,10 +1,41 @@
-// Craverly / Client / src / components / AboutHome / AboutHome.jsx
-import { FaInfoCircle } from "react-icons/fa";
-import { aboutfeature } from "../../assets/dummydata";
+import {
+  FaBolt,
+  FaCalendarCheck,
+  FaFire,
+  FaInfoCircle,
+  FaRegClock,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AboutImage from "../../assets/AboutImage.png";
 import FloatingParticle from "../FloatingParticle/FloatingParticle";
 import "./AboutHome.css";
+
+export const aboutfeature = [
+  {
+    icon: FaBolt,
+    title: "Instant Ordering",
+    text: "Seamless digital experience",
+    color: "from-teal-400 to-cyan-500",
+  },
+  {
+    icon: FaRegClock,
+    title: "Always Open",
+    text: "24/7 premium service",
+    color: "from-fuchsia-400 to-rose-600",
+  },
+  {
+    icon: FaCalendarCheck,
+    title: "Exclusive Booking",
+    text: "Priority reservations",
+    color: "from-teal-400 to-cyan-600",
+  },
+  {
+    icon: FaFire,
+    title: "Signature Dishes",
+    text: "Chef's special creations",
+    color: "from-violet-400 to-blue-600",
+  },
+];
 
 const AboutHome = () => {
   return (

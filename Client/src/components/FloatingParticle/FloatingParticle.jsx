@@ -1,5 +1,3 @@
-// Craverly / Client / src / components / FloatingParticle / FloatingParticle.jsx
-
 const FloatingParticle = ({ count = 40 }) => {
   const particle = Array.from({ length: count }, () => ({
     top: Math.random() * 100,

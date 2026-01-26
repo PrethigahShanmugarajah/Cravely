@@ -1,4 +1,3 @@
-// Cravely / Server / routes / userRoutes.js
 import express from "express";
 import { userLogin, userRegister } from "../controllers/userController.js";
 

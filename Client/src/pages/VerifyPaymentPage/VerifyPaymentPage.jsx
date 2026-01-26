@@ -1,48 +1,68 @@
-// Cravely / Client / src / pages / VerifyPaymentPage / VerifyPaymentPage.jsx
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../../CartContext/CartContext";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const VerifyPaymentPage = () => {
   const { clearCart } = useCart();
   const { search } = useLocation();
   const navigate = useNavigate();
-  const [statusMsg, setStatusMsg] = useState("Verfying Payment..");
-
-  const token = localStorage.getItem("authToken");
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const [statusMsg, setStatusMsg] = useState("Verifying payment...");
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const success = params.get("payment_status");
-    const session_id = params.get("session_id");
+    const confirmPayment = async () => {
+      const params = new URLSearchParams(search);
+      const success = params.get("success");
+      const session_id = params.get("session_id");
 
-    if (success == "true" || !session_id) {
       if (success === "false") {
+        console.log("Payment cancelled by user");
         navigate("/checkout", { replace: true });
         return;
       }
-      setStatusMsg("Payment failed but order placed for completion");
-      return;
-    }
 
-    api
-      .get(API_ROUTES.ORDER.ORDER_CONFIRM_PAYMENT, {
-        params: { session_id },
-        headers: authHeaders,
-      })
-      .then(() => {
-        clearCart();
-        navigate("/myorder", { replace: true });
-      })
-      .catch((error) => {
-        console.error("confirmation error:", error);
-        setStatusMsg("There was an error");
-        clearCart(false);
-      });
-  }, [search, clearCart, navigate, authHeaders]);
+      if (success !== "true" || !session_id) {
+        console.log("Invalid payment params:", { success, session_id });
+        setStatusMsg("Payment failed but order placed for completion");
+        return;
+      }
+
+      const token = localStorage.getItem("authToken");
+
+      try {
+        console.log("Confirm Payment API Call Started");
+        setStatusMsg("Verifying payment with server...");
+
+        const { data } = await api.get(API_ROUTES.ORDER.ORDER_CONFIRM_PAYMENT, {
+          params: { session_id },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Confirm Payment API Response:", data);
+
+        if (data?.success) {
+          console.log("Payment Confirm Success:", data.message);
+          clearCart();
+          navigate("/myorder", { replace: true });
+        } else {
+          showWarningToast(data?.message);
+          console.log("Payment Confirm Failed:", data?.message);
+          setStatusMsg(data?.message || "Payment not completed");
+        }
+      } catch (error) {
+        console.error(
+          "Confirm Payment Error:",
+          error?.response?.data?.message || error?.message,
+        );
+        showErrorToast(error?.response?.data?.message || error?.message);
+        setStatusMsg("There was an error confirming payment");
+      }
+    };
+
+    confirmPayment();
+  }, [search, clearCart, navigate]);
 
   return (
     <div className="min-h-scre4 flex items-center justify-center text-white">

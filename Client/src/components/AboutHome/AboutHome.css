@@ -1,4 +1,3 @@
-/* Craverly / Client / src / components / AboutHome / AboutHome.css */
 @import url("http://fonts.googleapis.com/css2?&family=Dancing+Script:wght@600&family=Great+vibes&display=swap");
 
 .font-cursive {
@@ -26,7 +25,10 @@
 }
 
 .shadow-3d {
-  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.3), -4px, -4px,
+  box-shadow:
+    8px 8px 25px rgba(0, 0, 0, 0.3),
+    -4px,
+    -4px,
     15px rgba(255, 255, 255, 0.05);
 }
 

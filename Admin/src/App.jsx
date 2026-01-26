@@ -1,4 +1,3 @@
-// Craverly /  Admin / src / App.jsx
 import AddItems from "./components/AddItems/AddItems";
 import List from "./components/List/List";
 import Navbar from "./components/Navbar/Navbar";

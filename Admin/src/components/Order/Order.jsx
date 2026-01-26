@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components / Order / Order.jsx
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";

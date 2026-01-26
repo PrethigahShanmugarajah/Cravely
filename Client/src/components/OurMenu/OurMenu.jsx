@@ -1,4 +1,3 @@
-// Craverly / Client / src / components / OurMenu / OurMenu.jsx
 import { useState } from "react";
 import { useCart } from "../../CartContext/CartContext";
 import { FaMinus, FaPlus } from "react-icons/fa";
@@ -43,7 +42,6 @@ const OurMenu = () => {
           });
 
           setMenuData(byCategory);
-          // showSuccessToast(data.message);
           console.log("Fetch Menu Success:", data.message);
         } else {
           showWarningToast(data?.message);
@@ -60,31 +58,7 @@ const OurMenu = () => {
     fetchMenu();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchMenu = async () => {
-  //     try {
-  //       const { data } = await api.get(API_ROUTES.ITEM.ITEM_GET_ALL);
-
-  //       const byCategory = Array.isArray(data.items)
-  //         ? data.items.reduce((acc, item) => {
-  //             const cat = item.category || "Uncategorized";
-  //             acc[cat] = acc[cat] || [];
-  //             acc[cat].push(item);
-  //             return acc;
-  //           }, {})
-  //         : {};
-
-  //       setMenuData(byCategory);
-  //     } catch (error) {
-  //       console.error("Fetch Menu Error:", error);
-  //     }
-  //   };
-
-  //   fetchMenu();
-  // }, []);
-
   const getCartEntry = (id) => cartItems.find((ci) => ci.item._id === id);
-  const getQuantity = (id) => getCartEntry(id)?.quantity || 0;
 
   const displayItems = (menuData[activeCategory] ?? []).slice(0, 12);
 
@@ -197,15 +171,6 @@ const OurMenu = () => {
             );
           })}
         </div>
-
-        {/* <div className="flex justify-center mt-16">
-          <Link
-            to="/menu"
-            className="bg-teal-900/30 border-2 border-teal-800/30 text-teal-100 px-8 sm:px-10 py-3 rounded-full font-cinzel uppercase tracking-widest transition-all duration-300 hover:bg-teal-800/40 hover:text-teal-50 hover:scale-105 hover:shadow-lg hover:shadow-teal-900/20 backdrop-blur-sm"
-          >
-            Explore Full Menu
-          </Link>
-        </div> */}
       </div>
     </div>
   );

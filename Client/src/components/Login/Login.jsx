@@ -1,4 +1,3 @@
-// Cravely / Client / src / components / Login / Login.jsx
 import { useEffect, useState } from "react";
 import {
   FaArrowRight,
@@ -8,7 +7,6 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa";
-import { inputBase } from "../../assets/dummydata";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
@@ -90,7 +88,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className={`${inputBase} pl-10 pr-4 py-3`}
+            className="w-full rounded-lg bg-[#0F172A] text-teal-100 placeholder-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 pl-10 pr-4 py-3"
           />
         </div>
 
@@ -102,7 +100,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className={`${inputBase} pl-10 pr-4 py-3`}
+            className="w-full rounded-lg bg-[#0F172A] text-teal-100 placeholder-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600 pl-10 pr-4 py-3"
           />
 
           <button

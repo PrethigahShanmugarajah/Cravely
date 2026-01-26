@@ -1,4 +1,3 @@
-// Cravely / Client / src / utils / toast.jsx
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {

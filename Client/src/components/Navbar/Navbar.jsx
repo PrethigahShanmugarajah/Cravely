@@ -1,4 +1,3 @@
-// Craverly / Client / src / components / Navbar / Navbar.jsx
 import { useEffect, useState } from "react";
 import { FaConciergeBell, FaUtensils } from "react-icons/fa";
 import {
@@ -228,7 +227,7 @@ const Navbar = () => {
       {/* -------- Login Modal -------- */}
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-linear-to-br from-[#0F172A] to-[#4a372a] rounded-xl p-8 w-full max-w-md relative border-4 border-teal-700/30">
+          <div className="bg-linear-to-br from-[#0F172A] to-[#1E293B] rounded-xl p-8 w-full max-w-md relative border-4 border-teal-700/30">
             <button
               onClick={() => navigate("/")}
               className="absolute top-4 right-4 text-teal-500 hover:text-teal-300 text-2xl"
@@ -236,7 +235,7 @@ const Navbar = () => {
               &times;
             </button>
             <h2 className="text-3xl font-bold bg-linear-to-r from-teal-400 to-teal-600 bg-clip-text text-transparent mb-6 text-center">
-              Foodie-Frenzy
+              Cravely
             </h2>
             <Login
               onLoginSuccess={handleLoginSuccess}

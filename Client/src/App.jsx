@@ -1,4 +1,3 @@
-// Cravely / Client / src / App.jsx
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
@@ -35,6 +34,7 @@ const App = () => {
         <Route path="/login" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/myorder/verify" element={<VerifyPaymentPage />} />
+        <Route path="/myOrders/verify" element={<VerifyPaymentPage />} />
         <Route
           path="/cart"
           element={

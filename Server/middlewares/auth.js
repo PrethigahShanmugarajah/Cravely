@@ -1,4 +1,3 @@
-// Cravely / Server / middlewares / auth.js
 import jwt from "jsonwebtoken";
 
 /*-------- Authentication middleware --------*/

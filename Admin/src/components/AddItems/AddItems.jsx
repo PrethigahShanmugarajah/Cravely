@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components / AddItems / AddItems.jsx
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiHeart, FiStar } from "react-icons/fi";
@@ -28,7 +27,7 @@ const AddItems = () => {
   const {
     control,
     handleSubmit,
-    // formState: { errors },
+    formState: { errors },
     reset,
     setValue,
   } = useForm({

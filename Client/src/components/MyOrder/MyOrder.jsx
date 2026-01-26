@@ -1,4 +1,3 @@
-// Cravely / Client / src / components / MyOrder / MyOrder.jsx
 import { useEffect, useState } from "react";
 import {
   FiArrowLeft,
@@ -12,11 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
-import {
-  showErrorToast,
-  showSuccessToast,
-  showWarningToast,
-} from "../../utils/toast";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const MyOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -66,7 +61,7 @@ const MyOrder = () => {
           setOrders(formattedOrders);
           setError(null);
 
-          showSuccessToast(data.message);
+          // showSuccessToast(data.message);
           console.log("Fetch Orders Success:", data.message);
         } else {
           showWarningToast(data.message);
@@ -197,22 +192,10 @@ const MyOrder = () => {
 
               <tbody>
                 {orders.map((order) => {
-                  // const totalItems = order.item.reduce(
-                  //   (sum, item) => sum + item.quantity,
-                  //   0,
-                  // );
-
                   const totalItems = order.items.reduce(
                     (sum, item) => sum + item.quantity,
                     0,
                   );
-
-                  // const totalPrice =
-                  //   order.total ??
-                  //   order.items.reduce(
-                  //     (sum, item) => sum + item.item.price * item.quantity,
-                  //     0,
-                  //   );
 
                   const totalPrice =
                     order.total ??

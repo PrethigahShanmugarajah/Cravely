@@ -1,4 +1,3 @@
-// Cravely / Server / controllers / cartController.js
 import { CartItem } from "../models/cartModel.js";
 
 /* -------- Cart Get -------- */
@@ -35,13 +34,6 @@ export const cartGet = async (req, res) => {
 export const cartAdd = async (req, res) => {
   try {
     const { itemId, quantity } = req.body;
-
-    // if (!itemId || typeof quantity !== "number") {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "ItemId and quantity are required",
-    //   });
-    // }
 
     if (!itemId) {
       return res.status(400).json({
@@ -211,7 +203,6 @@ export const cartClear = async (req, res) => {
       });
     }
 
-    // await CartItem.deleteMany({ user: req.user._id });
     const result = await CartItem.deleteMany({ user: req.user._id });
 
     return res.status(200).json({

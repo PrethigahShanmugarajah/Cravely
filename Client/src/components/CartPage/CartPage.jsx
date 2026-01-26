@@ -1,4 +1,3 @@
-// Cravely / Client / src / components / CartPage / CartPage.jsx
 import { useState } from "react";
 import { useCart } from "../../CartContext/CartContext";
 import { Link } from "react-router-dom";
@@ -12,7 +11,6 @@ const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, totalAmount } = useCart();
 
   const buildImageUrl = (path) => {
-    // if (!path) return "";
     if (!path) return null;
 
     return path.startsWith("http")

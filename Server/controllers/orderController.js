@@ -1,4 +1,3 @@
-// Cravely / Server / controllers / orderController.js
 import Stripe from "stripe";
 import "dotenv/config";
 import orderModel from "../models/orderModel.js";
@@ -22,12 +21,6 @@ export const orderCreate = async (req, res) => {
       total,
       items,
     } = req.body;
-
-    // if (!items || !Array.isArray(items) || items.length === 0) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Items array is invalid or empty." });
-    // }
 
     if (!items) {
       return res
@@ -121,7 +114,6 @@ export const orderCreate = async (req, res) => {
         city,
         zipCode,
         paymentMethod,
-        // subtotal,
         subTotal: subtotal,
         tax,
         total,
@@ -151,7 +143,6 @@ export const orderCreate = async (req, res) => {
       city,
       zipCode,
       paymentMethod,
-      // subtotal,
       subTotal: subtotal,
       tax,
       total,
@@ -386,12 +377,10 @@ export const orderUpdateById = async (req, res) => {
     }
 
     if (req.body.email && order.email !== req.body.email) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Order email does not match the provided email.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Order email does not match the provided email.",
+      });
     }
 
     const updated = await orderModel.findByIdAndUpdate(

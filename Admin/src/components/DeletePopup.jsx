@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components / DeletePopup.jsx
 import { MdClose } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
 

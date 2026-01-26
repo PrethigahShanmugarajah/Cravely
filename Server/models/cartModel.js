@@ -1,4 +1,3 @@
-// Cravely / Server / models / cartModel.js
 import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema(
@@ -19,7 +18,7 @@ const cartItemSchema = new mongoose.Schema(
       min: 1,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const CartItem = mongoose.model("CartItem", cartItemSchema);

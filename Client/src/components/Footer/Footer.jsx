@@ -1,8 +1,39 @@
-// Craverly / Client / src / components / Footer / Footer.jsx
 import { useState } from "react";
-import { FaRegEnvelope } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaRegEnvelope,
+  FaYoutube,
+} from "react-icons/fa";
 import { BiChevronRight } from "react-icons/bi";
-import { socialIcons } from "../../assets/dummydata";
+import { FaXTwitter } from "react-icons/fa6";
+
+export const socialIcons = [
+  {
+    icon: FaFacebook,
+    link: "https://www.facebook.com/share/1DjbwhdR4z/",
+    color: "#3B5998",
+    label: "Facebook",
+  },
+  {
+    icon: FaInstagram,
+    link: "https://www.instagram.com/hexagondigitalservices?igsh=MW1nanQ2eXIycnRkZQ==",
+    color: "#E1306C",
+    label: "Instagram",
+  },
+  {
+    icon: FaXTwitter,
+    link: "https://x.com/HexagonDService?t=Vv5ReZAIbXONqkq_O0ksWQ&s=09",
+    color: "#000000",
+    label: "X",
+  },
+  {
+    icon: FaYoutube,
+    link: "https://youtube.com/@hexagondigitalservices?si=UnBt0AHI-ChN5Mze",
+    color: "#FF0000",
+    label: "Youtube",
+  },
+];
 
 const Footer = () => {
   const navItems = [

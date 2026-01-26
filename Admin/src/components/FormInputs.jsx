@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components /  FormInputs.jsx
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { FiUpload } from "react-icons/fi";

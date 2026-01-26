@@ -1,8 +1,7 @@
-// Cravely / Client / src / components / Banner / Banner.jsx
 import { useState } from "react";
-import { FaDownload, FaPlay, FaTimes } from "react-icons/fa";
+import { FaDownload, FaPlay } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { bannerAssets } from "../../assets/dummydata";
+import { bannerAssets } from "../../utils/data";
 
 const Banner = () => {
   const [searchQuery, setSearchQuery] = useState("");

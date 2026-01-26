@@ -1,4 +1,3 @@
-// Cravely / Client / src / components / Checkout / Checkout.jsx
 import { useEffect, useState } from "react";
 import { FaArrowLeft, FaLock } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -17,16 +16,6 @@ const Checkout = () => {
   const { totalAmount, cartItems, clearCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    zipCode: "",
-    paymentMethod: "",
-  });
   const [loading, setLoading] = useState(false);
 
   const {

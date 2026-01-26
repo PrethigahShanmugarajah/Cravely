@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components / List / List.jsx
 import { useEffect, useState } from "react";
 import { FiHeart, FiStar, FiTrash2 } from "react-icons/fi";
 import api from "../../api/axios";

@@ -1,4 +1,3 @@
-// Craverly / Client / src / components / SignUp / SignUp.jsx
 import { useState } from "react";
 import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";

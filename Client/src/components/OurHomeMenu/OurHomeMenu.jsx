@@ -1,4 +1,3 @@
-// Craverly / Client / src / components / OurHomeMenu / OurHomeMenu.jsx
 import { useEffect, useState } from "react";
 import { useCart } from "../../CartContext/CartContext";
 import { FaMinus, FaPlus } from "react-icons/fa";
@@ -37,7 +36,6 @@ const OurHomeMenu = () => {
           }, {});
 
           setMenuData(grouped);
-          // showSuccessToast(data.message);
           console.log("Fetch Items Success:", data.message);
         } else {
           showWarningToast(data.message);
@@ -51,20 +49,6 @@ const OurHomeMenu = () => {
 
     fetchItems();
   }, []);
-
-  // useEffect(() => {
-  //   api
-  //     .get(API_ROUTES.ITEM.ITEM_GET_ALL)
-  //     .then((res) => {
-  //       const grouped = res.data.reduce((acc, item) => {
-  //         acc[item.category] = acc[item.category] || [];
-  //         acc[item.category].push(item);
-  //         return acc;
-  //       }, {});
-  //       setMenuData(grouped);
-  //     })
-  //     .catch(console.error);
-  // }, []);
 
   const getCartEntry = (id) => cartItems.find((ci) => ci.item._id === id);
   const getQuantity = (id) => getCartEntry(id)?.quantity || 0;

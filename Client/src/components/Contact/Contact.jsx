@@ -1,15 +1,57 @@
-// Cravely / Client / src / components / Contact / Contact.jsx
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import { FaUtensils } from "react-icons/fa";
 import {
   FiArrowRight,
   FiGlobe,
+  FiHome,
   FiMail,
   FiMapPin,
   FiMessageSquare,
   FiPhone,
+  FiSmartphone,
+  FiUser,
 } from "react-icons/fi";
-import { contactFormFields } from "../../assets/dummydata";
+import { showSuccessToast } from "../../utils/toast";
+
+export const contactFormFields = [
+  {
+    label: "Full Name",
+    name: "name",
+    type: "text",
+    placeholder: "Enter your full name",
+    Icon: FiUser,
+  },
+  {
+    label: "Phone Number",
+    name: "phone",
+    type: "tel",
+    placeholder: "+91 12345 67890",
+    pattern: "[+]{0,1}[0-9]{10,13}",
+    Icon: FiSmartphone,
+  },
+  {
+    label: "Email Address",
+    name: "email",
+    type: "email",
+    placeholder: "your.email@example.com",
+    Icon: FiMail,
+  },
+  {
+    label: "Address",
+    name: "address",
+    type: "text",
+    placeholder: "Enter your delivery address",
+    Icon: FiHome,
+  },
+  {
+    label: "Dish Name",
+    name: "dish",
+    type: "text",
+    placeholder: "Enter dish name (e.g., Butter Chicken)",
+    Icon: FaUtensils,
+  },
+];
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -22,25 +64,26 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Form Submitted:`, formData);
-    toast.success("Your query has been submitted successfully!", {
-      style: {
-        border: "2px solid #0E7490",
-        padding: "16px",
-        color: "#FFFFFF",
-        background: "rgba(0,0,0,0.8)",
-        backdropFilter: "blur(10px)",
-      },
-      iconTheme: { primary: "#0E7490", secondary: "#FFFFFF" },
-    });
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-      dish: "",
-      query: "",
-    });
+    const message = `
+      Name: ${formData.name}
+      Phone: ${formData.phone}
+      Email: ${formData.email}
+      Address: ${formData.address}
+      Dish: ${formData.dish}
+      Query: ${formData.query}
+    `;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+
+    const whatsappAPI = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+    showSuccessToast("Opening WhatsApp to send your query!");
+
+    window.open(whatsappAPI, "_blank");
+
+    setFormData({ name: "", phone: "", address: "", dish: "", query: "" });
   };
 
   const handleChange = (e) =>
@@ -160,7 +203,7 @@ const Contact = () => {
                       />
                     </div>
                   </div>
-                )
+                ),
               )}
 
               <div>

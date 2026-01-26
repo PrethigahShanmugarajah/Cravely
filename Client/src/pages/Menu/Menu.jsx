@@ -1,5 +1,3 @@
-// Craverly / Client / src / pages / Menu / Menu.jsx
-
 import OurMenu from "../../components/OurMenu/OurMenu";
 
 const Menu = () => {

@@ -1,15 +1,46 @@
 // Craverly / Client / src / components / About / About.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { features, stats, teamMembers } from "../../assets/dummydata";
+import { features, teamMembers } from "../../utils/data";
 import {
   FaTwitter,
   FaInstagram,
   FaFacebookF,
   FaLinkedinIn,
+  FaHeart,
+  FaLeaf,
+  FaRegClock,
 } from "react-icons/fa";
+import { GiFoodTruck } from "react-icons/gi";
 
-const socialIcons = {
+export const stats = [
+  {
+    number: "10M+",
+    label: "Deliveries",
+    icon: GiFoodTruck,
+    gradient: "from-teal-500 via-cyan-400 to-lime-600",
+  },
+  {
+    number: "98%",
+    label: "Satisfaction",
+    icon: FaHeart,
+    gradient: "from-fuchsia-500 via-teal-500 to-lime-500",
+  },
+  {
+    number: "500+",
+    label: "Cities",
+    icon: FaLeaf,
+    gradient: "from-emerald-500 via-teal-500 to-lime-600",
+  },
+  {
+    number: "24/7",
+    label: "Support",
+    icon: FaRegClock,
+    gradient: "from-teal-500 via-cyan-400 to-fuchsia-500",
+  },
+];
+
+export const socialIcons = {
   twitter: <FaTwitter className="h-6 w-6" />,
   instagram: <FaInstagram className="h-6 w-6" />,
   facebook: <FaFacebookF className="h-6 w-6" />,
@@ -242,12 +273,6 @@ const About = () => {
                           rel="noopener noreferrer"
                           className="text-teal-500 hover:text-teal-400 transition-colors duration-300 hover:scale-110"
                         >
-                          {/* {{
-                            twitter: <FaTwitter className="h-6 w-6" />,
-                            instagram: <FaInstagram className="h-6 w-6" />,
-                            facebook: <FaFacebookF className="h-6 w-6" />,
-                            linkedin: <FaLinkedinIn className="h-6 w-6" />,
-                          }} */}
                           {socialIcons[p]}
                         </a>
                       ))}

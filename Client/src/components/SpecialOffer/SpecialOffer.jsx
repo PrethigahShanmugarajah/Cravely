@@ -1,10 +1,4 @@
-// Craverly / Client / src / components / SpecialOffer / SpecialOffer.jsx
 import { useState } from "react";
-import {
-  addButtonBase,
-  addButtonHover,
-  commonTransition,
-} from "../../assets/dummydata";
 import { useCart } from "../../CartContext/CartContext";
 import { FaFire, FaHeart, FaPlus, FaStar } from "react-icons/fa";
 import { HiMinus, HiPlus } from "react-icons/hi";
@@ -29,7 +23,6 @@ const SpecialOffer = () => {
         if (data?.success && Array.isArray(data.items)) {
           setItems(data.items);
 
-          // showSuccessToast(data.message);
           console.log("Fetch Special Offer Items Success:", data.message);
         } else {
           showWarningToast(data?.message);
@@ -47,13 +40,6 @@ const SpecialOffer = () => {
 
     fetchSpecialOfferItems();
   }, []);
-
-  // useEffect(() => {
-  //   api
-  //     .get(API_ROUTES.ITEM.ITEM_GET_ALL)
-  //     .then((res) => setItems(res.data.items ?? res.data))
-  //     .catch((err) => console.error(err));
-  // }, []);
 
   const displayList = Array.isArray(items)
     ? items.slice(0, showAll ? 8 : 4)
@@ -151,7 +137,7 @@ const SpecialOffer = () => {
                     ) : (
                       <button
                         onClick={() => addToCart(item, 1)}
-                        className={`${addButtonBase} ${addButtonHover} ${commonTransition} cursor-pointer`}
+                        className="flex items-center gap-2 bg-linear-to-r from-slate-600 to-teal-600 text-white px-5 py-2.5 rounded-xl font-bold border-2 border-teal-400/30 hover:gap-3 hover:shadow-lg hover:shadow-teal-500/30 active:scale-95 relative overflow-hidden transition-all duration-300 cursor-pointer"
                       >
                         <div className="absolute inset-0 bg-linear-to-r from-teal-500/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
 

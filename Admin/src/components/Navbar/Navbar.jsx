@@ -1,4 +1,3 @@
-// Cravely / Admin / src / components / Navbar / Navbar.jsx
 import { useState } from "react";
 import { FiList, FiMenu, FiPackage, FiPlusCircle, FiX } from "react-icons/fi";
 import { FaConciergeBell } from "react-icons/fa";

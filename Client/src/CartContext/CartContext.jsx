@@ -1,4 +1,3 @@
-// Cravely / Client / src / CartContext / CartContext.jsx
 import {
   createContext,
   useCallback,
@@ -80,7 +79,6 @@ export const CartProvider = ({ children }) => {
         console.log("Fetch Cart API Response:", data);
 
         if (data.success && (Array.isArray(data.cartItems) || data.cartItems)) {
-          // showSuccessToast(data.message);
           console.log("Fetch Cart Success:", data.message);
 
           const cartArray = Array.isArray(data.cartItems) ? data.cartItems : [];

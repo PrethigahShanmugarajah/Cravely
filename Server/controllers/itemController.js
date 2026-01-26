@@ -1,4 +1,3 @@
-// Cravely / Server / controllers / itemController.js
 import itemModel from "../models/itemModel.js";
 
 /* -------- Item Create -------- */
@@ -46,10 +45,6 @@ export const itemGetAll = async (req, res) => {
     const items = await itemModel.find().sort({ createdAt: -1 });
     const host = `${req.protocol}://${req.get("host")}`;
 
-    // const withFullUrl = itemModel.applyTimestamps((i) => ({
-    //   ...i.toObject(),
-    //   imageUrl: i.imageUrl ? host + i.imageUrl : "",
-    // }));
     const withFullUrl = items.map((i) => ({
       ...i.toObject(),
       imageUrl: i.imageUrl ? host + i.imageUrl : "",

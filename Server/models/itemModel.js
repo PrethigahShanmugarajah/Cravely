@@ -1,4 +1,3 @@
-// Cravely / Server / models / itemModel.js
 import mongoose from "mongoose";
 
 const itemSchema = new mongoose.Schema(
