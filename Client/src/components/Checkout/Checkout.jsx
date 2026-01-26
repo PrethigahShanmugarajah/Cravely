@@ -221,7 +221,7 @@ const Checkout = () => {
               {cartItems.map(({ _id, item, quantity }) => (
                 <div
                   key={_id}
-                  className="flex justify-between items-center bg-[#2C2F3F] p-3 rounded-lg"
+                  className="flex justify-between items-center bg-[##2C2F3F] p-3 rounded-lg"
                 >
                   <div className="flex-1">
                     <span className="text-teal-100">{item.name}</span>
