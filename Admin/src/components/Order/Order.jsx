@@ -2,11 +2,15 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
-import { toast } from "react-toastify";
 import { FiBox, FiCheckCircle, FiClock, FiTruck, FiUser } from "react-icons/fi";
 import { ClipLoader } from "react-spinners";
 import { useForm, useWatch } from "react-hook-form";
 import { SelectInput } from "../FormInputs";
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from "../../utils/toast";
 
 export const iconMap = {
   FiClock: <FiClock className="text-lg" />,
@@ -23,22 +27,22 @@ export const statusStyles = {
     hideLabel: false,
   },
   outForDelivery: {
-    color: "text-blue-400",
-    bg: "bg-blue-900/20",
+    color: "text-sky-400",
+    bg: "bg-sky-900/20",
     icon: "FiTruck",
     label: "Out for Delivery",
     hideLabel: false,
   },
   delivered: {
-    color: "text-green-400",
-    bg: "bg-green-900/20",
+    color: "text-emerald-400",
+    bg: "bg-emerald-900/20",
     icon: "FiCheckCircle",
     label: "Delivered",
     hideLabel: false,
   },
   succeeded: {
-    color: "text-green-400",
-    bg: "bg-green-900/20",
+    color: "text-emerald-400",
+    bg: "bg-emerald-900/20",
     icon: "FiCheckCircle",
     label: "Completed",
     hideLabel: true,
@@ -48,11 +52,11 @@ export const statusStyles = {
 export const paymentMethodDetails = {
   cod: {
     label: "COD",
-    class: "bg-yellow-600/30 text-yellow-300 border-yellow-500/50",
+    class: "bg-lime-600/30 text-lime-300 border-lime-500/50",
   },
   card: {
     label: "Credit/Debit Card",
-    class: "bg-blue-600/30 text-blue-300 border-blue-500/50",
+    class: "bg-sky-600/30 text-sky-300 border-sky-500/50",
   },
   upi: {
     label: "UPI Payment",
@@ -60,7 +64,7 @@ export const paymentMethodDetails = {
   },
   default: {
     label: "Online",
-    class: "bg-green-600/30 text-green-400 border-green-500/50",
+    class: "bg-emerald-600/30 text-emerald-400 border-emerald-500/50",
   },
 };
 
@@ -134,11 +138,11 @@ const Order = () => {
           setOrders(formatted);
           setError(null);
         } else {
-          toast.warn(data.message);
+          showWarningToast(data.message);
           console.log("Fetch Order Data Error:", data.message);
         }
       } catch (error) {
-        toast.error(error?.response?.data?.message || error?.message);
+        showErrorToast(error?.response?.data?.message || error?.message);
         console.log("Fetch Order Error:", error);
       } finally {
         setLoading(false);
@@ -158,7 +162,7 @@ const Order = () => {
       console.log("Change Order Status API Response:", data.updated);
 
       if (data.success) {
-        toast.success(data.message);
+        showSuccessToast(data.message);
         console.log("Change Order Status Success:", data.message);
 
         setOrders(
@@ -168,11 +172,11 @@ const Order = () => {
         );
         setError(null);
       } else {
-        toast.warn(data.message);
+        showWarningToast(data.message);
         console.log("Change Order Status Data Error:", data.message);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || error?.message);
+      showErrorToast(error?.response?.data?.message || error?.message);
       console.log("Change Order Status Error:", error);
     } finally {
       setLoading(false);
@@ -189,7 +193,7 @@ const Order = () => {
   if (error)
     return (
       <div className="min-h-screen bg-linear-to-br from-[#111827] via-[#1F2937] to-[#293548] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div className="text-red-400 text-xl">{error}</div>
+        <div className="text-state-400 text-xl">{error}</div>
       </div>
     );
 
@@ -201,9 +205,9 @@ const Order = () => {
             Order Management
           </h2>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[70vh] overflow-y-auto custom-scrollbar">
             <table className="w-full">
-              <thead className="bg-[#2C2F3F]/50">
+              <thead className="bg-[##2C2F3F]/50">
                 <tr>
                   {[
                     "Order ID",
@@ -232,10 +236,6 @@ const Order = () => {
                     0,
                   );
 
-                  // const totalPrice =
-                  //   order.total ??
-                  //   order.items.reduce((s, i) => s + i.item.price * i.quantity);
-
                   const totalPrice =
                     typeof order.total === "number"
                       ? order.total
@@ -245,7 +245,6 @@ const Order = () => {
                           0,
                         );
 
-                  // const payMethod = paymentMethodDetails[order.payMethod?.toLowerCase()] || paymentMethodDetails;
                   const payMethod =
                     paymentMethodDetails[order.paymentMethod?.toLowerCase()] ||
                     paymentMethodDetails.default;
@@ -260,7 +259,7 @@ const Order = () => {
                   return (
                     <tr
                       key={order._id}
-                      className="border-b border-teal-500/20 hover:bg-[#2C2F3F]/30 transition-colors group"
+                      className="border-b border-teal-500/20 hover:bg-[##2C2F3F]/30 transition-colors group"
                     >
                       <td className="p-4 font-mono text-sm text-teal-100">
                         #{order._id.slice(-8)}
@@ -293,7 +292,7 @@ const Order = () => {
                       </td>
 
                       <td className="p-4">
-                        <div className=" space-y-1 max-h-52 overflow-auto">
+                        <div className="space-y-1 max-h-52 overflow-y-auto custom-scrollbar">
                           {order.items.map((itm, idx) => (
                             <div
                               key={idx}
@@ -357,26 +356,6 @@ const Order = () => {
                           <span className={`${stat.color} text-xl`}>
                             {iconMap[stat.icon]}
                           </span>
-
-                          {/* <select
-                            value={order.value}
-                            onChange={(e) =>
-                              handleStatusChange(order._id, e.target.value)
-                            }
-                            className={`px-4 py-2 rounded-lg ${stat.bg} ${stat.color} border border-teal-500/20 text-sm cursor-pointer`}
-                          >
-                            {Object.entries(statusStyles)
-                              .filter(([k]) => k !== "succeeded")
-                              .map(([key, sty]) => (
-                                <option
-                                  value={key}
-                                  key={key}
-                                  className={`${sty.bg} ${sty.color}`}
-                                >
-                                  {sty.label}
-                                </option>
-                              ))}
-                          </select> */}
 
                           <SelectInput
                             name={`status.${order._id}`}
