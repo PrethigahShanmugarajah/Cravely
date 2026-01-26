@@ -5,9 +5,20 @@ import { Link } from "react-router-dom";
 import { FaMinus, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 
 const CartPage = () => {
+  const BASE_URL = import.meta.env.VITE_BASEURL;
+
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, totalAmount } = useCart();
+
+  const buildImageUrl = (path) => {
+    // if (!path) return "";
+    if (!path) return null;
+
+    return path.startsWith("http")
+      ? path
+      : `${BASE_URL}/uploads/${path.replace(/^\/uploads\//, "")}`;
+  };
 
   return (
     <div className="min-h-screen overflow-x-hidden py-16 px-4 lg:px-8 bg-linear-to-br from-[#111827] via-[#1F2937] to-[#293548]">
@@ -32,17 +43,21 @@ const CartPage = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {cartItems.map((item) => (
+              {cartItems.map(({ _id, item, quantity }) => (
                 <div
-                  key={item.id}
+                  key={_id}
                   className="group bg-teal-900/20 p-4 rounded-2xl border-2 border-dashed border-teal-500 backdrop-blur-sm flex flex-col items-center gap-4 transition-all duration-300 hover:border-solid hover:shadow-xl hover:shadow-teal-900/10 transform hover:-translate-y-1 animate-fade-in cursor-pointer"
                 >
                   <div
                     className="w-24 h-24 shrink-0 cursor-pointer relative overflow-hidden rounded-lg transition-transform duration-300"
-                    onClick={() => setSelectedImage(item.image)}
+                    onClick={() =>
+                      setSelectedImage(
+                        buildImageUrl(item.imageUrl || item.image),
+                      )
+                    }
                   >
                     <img
-                      src={item.image}
+                      src={buildImageUrl(item.imageUrl || item.image)}
                       alt={item.name}
                       className="w-full h-full object-contain"
                     />
@@ -54,14 +69,14 @@ const CartPage = () => {
                     </h3>
 
                     <p className="text-teal-100/80 font-cinzel mt-1">
-                      ${item.price}
+                      ${Number(item.price).toFixed(2)}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() =>
-                        updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                        updateQuantity(_id, Math.max(1, quantity - 1))
                       }
                       className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
                     >
@@ -69,11 +84,11 @@ const CartPage = () => {
                     </button>
 
                     <span className="w-8 text-center text-teal-100 font-cinzel">
-                      {item.quantity}
+                      {quantity}
                     </span>
 
                     <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateQuantity(_id, quantity + 1)}
                       className="w-8 h-8 rounded-full bg-teal-900/40 flex items-center justify-center hover:bg-teal-800/50 transition-all duration-200 active:scale-95 cursor-pointer"
                     >
                       <FaPlus className="w-8 text-center text-teal-100 font-cinzel" />
@@ -82,7 +97,7 @@ const CartPage = () => {
 
                   <div className="flex items-center justify-between w-full">
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCart(_id)}
                       className="bg-teal-900/40 px-3 py-1 rounded-full font-cinzel text-xs uppercase transition-all duration-300 hover:bg-teal-800/50 flex items-center gap-1 active:scale-95 cursor-pointer"
                     >
                       <FaTrash className="w-4 h-4 text-teal-100" />
@@ -90,7 +105,7 @@ const CartPage = () => {
                     </button>
 
                     <p className="text-sm font-dancingscript text-teal-100">
-                      ${item.price * item.quantity}
+                      ${Number(item.price * quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -108,7 +123,7 @@ const CartPage = () => {
 
                 <div className="flex items-center gap-8">
                   <h2 className="text-3xl font-dancingscript text-teal-100">
-                    Total: ${cartTotal}
+                    Total: ${Number(totalAmount).toFixed(2)}
                   </h2>
 
                   <button className="bg-teal-900/40 px-8 py-3 rounded-full font-cinzel uppercase tracking-wider hover:bg-teal-800/50 transition-all duration-300 text-teal-100 flex items-center gap-2 active:scale-95 cursor-pointer">
