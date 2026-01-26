@@ -83,7 +83,8 @@ export const CartProvider = ({ children }) => {
           // showSuccessToast(data.message);
           console.log("Fetch Cart Success:", data.message);
 
-          const cartArray = Array.isArray(data.cart) ? data.cart : [];
+          // const cartArray = Array.isArray(data.cart) ? data.cart : [];
+          const cartArray = Array.isArray(data.cartItems) ? data.cartItems : [];
           dispatch({ type: "HYDRATE_CART", payload: cartArray });
         } else {
           showWarningToast(data.message);
@@ -259,8 +260,14 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const totalItems = cartItems.reduce((sum, ci) => sum + ci.quantity, 0);
+  // const totalAmount = cartItems.reduce((sum, ci) => {
+  //   const price = ci?.price ?? 0;
+  //   const qty = ci?.quantity ?? 0;
+  //   return sum + price * qty;
+  // }, 0);
+
   const totalAmount = cartItems.reduce((sum, ci) => {
-    const price = ci?.price ?? 0;
+    const price = Number(ci?.item?.price ?? 0);
     const qty = ci?.quantity ?? 0;
     return sum + price * qty;
   }, 0);
