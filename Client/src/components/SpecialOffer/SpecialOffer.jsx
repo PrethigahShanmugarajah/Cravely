@@ -70,7 +70,7 @@ const SpecialOffer = () => {
             Today's <span className="text-stoke-gold">Exclusive</span>Delights
           </h1>
 
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto tracking-auto tracking-wide leading-relaxed">
+          <p className="text-lg text-zinc-300 max-w-3xl mx-auto tracking-auto tracking-wide leading-relaxed">
             Indulge in our chef’s special creations, designed to tantalize your
             taste buds.
           </p>
@@ -103,7 +103,7 @@ const SpecialOffer = () => {
                       <span className="font-bold">{item.rating}</span>
                     </span>
 
-                    <span className="flex items-center gap-2 text-red-500">
+                    <span className="flex items-center gap-2 text-state-500">
                       <FaHeart className="text-xl animate-heartbeat" />
                       <span className="font-bold">{item.hearts}</span>
                     </span>
@@ -115,7 +115,7 @@ const SpecialOffer = () => {
                     {item.name}
                   </h3>
 
-                  <p className="text-gray-300 mb-5 text-sm leading-relaxed tracking-wide">
+                  <p className="text-zinc-300 mb-5 text-sm leading-relaxed tracking-wide">
                     {item.description}
                   </p>
 
