@@ -5,6 +5,7 @@ import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
 import { toast } from "react-toastify";
 import DeletePopup from "../DeletePopup";
+import { showErrorToast, showWarningToast } from "../../utils/toast";
 
 const List = () => {
   const [items, setItems] = useState([]);
@@ -24,11 +25,11 @@ const List = () => {
 
           setItems(data.items);
         } else {
-          toast.warn(data.message);
+          showWarningToast(data.message);
           console.log("Fetch Item Data Error:", data.message);
         }
       } catch (error) {
-        toast.error(error?.response?.data?.message || error?.message);
+        showErrorToast(error?.response?.data?.message || error?.message);
         console.log("Fetch Item Error:", error);
       } finally {
         setLoading(false);
@@ -39,7 +40,6 @@ const List = () => {
   }, []);
 
   const handleDelete = async (itemId) => {
-    // if (!deleteItemId) return;
     if (!itemId) return;
 
     try {
@@ -77,7 +77,7 @@ const List = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-[#1a120b] via-[#2a1e14] to-[#3e2b1d] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-linear-to-br from-[#111827] via-[#1F2937] to-[#293548] py-12 px-4 sm:px-6 lg:px-8">
         Loading Menu...
       </div>
     );
@@ -93,7 +93,7 @@ const List = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#2C2F3F]/50">
+              <thead className="bg-[##2C2F3F]/50">
                 <tr>
                   <th className="p-4 text-left text-teal-400">Image</th>
                   <th className="p-4 text-left text-teal-400">Name</th>
@@ -109,7 +109,7 @@ const List = () => {
                 {items.map((item) => (
                   <tr
                     key={item._id}
-                    className="border-b border-teal-500/20 hover:bg-[#2C2F3F]/30 transition-colors"
+                    className="border-b border-teal-500/20 hover:bg-[##2C2F3F]/30 transition-colors"
                   >
                     <td className="p-4">
                       <div className="w-24 h-24 overflow-hidden rounded-lg">
@@ -154,9 +154,8 @@ const List = () => {
 
                     <td className="p-4 text-center">
                       <button
-                        // onClick={() => handleDelete(item._id)}
                         onClick={() => setDeleteItemId(item._id)}
-                        className="text-teal-500 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-900/20 cursor-pointer"
+                        className="text-teal-500 hover:text-state-400 transition-colors p-2 rounded-lg hover:bg-state-900/20 cursor-pointer"
                       >
                         <FiTrash2 className="text-2xl" />
                       </button>
