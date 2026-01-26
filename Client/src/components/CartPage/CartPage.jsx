@@ -126,9 +126,12 @@ const CartPage = () => {
                     Total: ${Number(totalAmount).toFixed(2)}
                   </h2>
 
-                  <button className="bg-teal-900/40 px-8 py-3 rounded-full font-cinzel uppercase tracking-wider hover:bg-teal-800/50 transition-all duration-300 text-teal-100 flex items-center gap-2 active:scale-95 cursor-pointer">
+                  <Link
+                    to="/checkout"
+                    className="bg-teal-900/40 px-8 py-3 rounded-full font-cinzel uppercase tracking-wider hover:bg-teal-800/50 transition-all duration-300 text-teal-100 flex items-center gap-2 active:scale-95 cursor-pointer"
+                  >
                     Checkout Now
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
