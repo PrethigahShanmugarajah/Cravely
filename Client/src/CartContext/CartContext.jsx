@@ -83,7 +83,6 @@ export const CartProvider = ({ children }) => {
           // showSuccessToast(data.message);
           console.log("Fetch Cart Success:", data.message);
 
-          // const cartArray = Array.isArray(data.cart) ? data.cart : [];
           const cartArray = Array.isArray(data.cartItems) ? data.cartItems : [];
           dispatch({ type: "HYDRATE_CART", payload: cartArray });
         } else {
@@ -98,26 +97,6 @@ export const CartProvider = ({ children }) => {
 
     fetchCart();
   }, []);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
-
-  //   api
-  //     .get(API_ROUTES.CART.CART_GET, {
-  //       withCredentials: true,
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     })
-  //     // .then((res) => dispatch({ type: "HYDRATE_CART", payload: res.data }))
-  //     .then((res) => {
-  //       const cartArray = Array.isArray(res.data)
-  //         ? res.data
-  //         : res.data.cart || [];
-  //       dispatch({ type: "HYDRATE_CART", payload: cartArray });
-  //     })
-  //     .catch((error) => {
-  //       if (error.response?.status !== 401) console.error(error);
-  //     });
-  // }, []);
 
   /* ---- Dispatcher Wrapped With useCallback for Performance ---- */
   const addToCart = useCallback(async (item, qty) => {
@@ -150,19 +129,6 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // const addToCart = useCallback(async (item, qty) => {
-  //   const token = localStorage.getItem("authToken");
-
-  //   const res = await api.post(
-  //     API_ROUTES.CART.CART_ADD,
-  //     { itemId: item._id, quantity: qty },
-  //     { withCredentials: true, headers: { Authorization: `Bearer ${token}` } },
-  //   );
-
-  //   // dispatch({ type: "ADD_ITEM", payload: res.data });
-  //   dispatch({ type: "ADD_ITEM", payload: res.data.item });
-  // }, []);
-
   const removeFromCart = useCallback(async (_id) => {
     const token = localStorage.getItem("authToken");
 
@@ -187,17 +153,6 @@ export const CartProvider = ({ children }) => {
       console.error("Remove Cart Item Error:", error);
     }
   }, []);
-
-  // const removeFromCart = useCallback(async (_id) => {
-  //   const token = localStorage.getItem("authToken");
-
-  //   await api.delete(API_ROUTES.CART.CART_DELETE_ITEM(_id), {
-  //     withCredentials: true,
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   });
-
-  //   dispatch({ type: "REMOVE_ITEM", payload: _id });
-  // }, []);
 
   const updateQuantity = useCallback(async (_id, qty) => {
     const token = localStorage.getItem("authToken");
@@ -229,42 +184,36 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // const updateQuantity = useCallback(async (_id, qty) => {
-  //   const token = localStorage.getItem("authToken");
-
-  //   const res = await api.put(
-  //     API_ROUTES.CART.CART_UPDATE_ITEM(_id),
-  //     { quantity: qty },
-  //     {
-  //       withCredentials: true,
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     },
-  //   );
-
-  //   // dispatch({ type: "UPDATE_ITEM", payload: res.data });
-  //   dispatch({ type: "UPDATE_ITEM", payload: res.data.item });
-  // }, []);
-
   const clearCart = useCallback(async () => {
     const token = localStorage.getItem("authToken");
 
-    await api.delete(
-      API_ROUTES.CART.CART_CLEAR,
-      {},
-      {
-        withCredentials: true,
+    try {
+      const { data } = await api.delete(API_ROUTES.CART.CART_CLEAR, {
         headers: { Authorization: `Bearer ${token}` },
-      },
-    );
-    dispatch({ type: "CLEAR_CART" });
+        withCredentials: true,
+      });
+
+      console.log("Clear Cart API Response:", data);
+
+      if (data.success) {
+        console.log("Clear Cart Success:", data.message);
+        showSuccessToast(data.message);
+
+        dispatch({ type: "CLEAR_CART" });
+      } else {
+        console.log("Clear Cart Data Error:", data.message);
+        showWarningToast(data.message);
+      }
+    } catch (error) {
+      console.log(
+        "Clear Cart Error:",
+        error?.response?.data?.message || error?.message,
+      );
+      showErrorToast(error?.response?.data?.message || error?.message);
+    }
   }, []);
 
   const totalItems = cartItems.reduce((sum, ci) => sum + ci.quantity, 0);
-  // const totalAmount = cartItems.reduce((sum, ci) => {
-  //   const price = ci?.price ?? 0;
-  //   const qty = ci?.quantity ?? 0;
-  //   return sum + price * qty;
-  // }, 0);
 
   const totalAmount = cartItems.reduce((sum, ci) => {
     const price = Number(ci?.item?.price ?? 0);
