@@ -22,6 +22,7 @@ const API_ROUTES = {
   ORDER: {
     ORDER_CONFIRM_PAYMENT: `${BASE_URL}/api/order/order-confirm-payment`,
     ORDER_CREATE: `${BASE_URL}/api/order/order-create`,
+    ORDER_GET: `${BASE_URL}/api/order/order-get`,
   },
 };
 export default API_ROUTES;
