@@ -6,7 +6,11 @@ import api from "../../api/axios";
 import API_ROUTES from "../../api/api_route";
 import { FaRupeeSign } from "react-icons/fa";
 import { FileInput, Input, SelectInput } from "../FormInputs";
-import { toast } from "react-toastify";
+import {
+  showErrorToast,
+  showSuccessToast,
+  showWarningToast,
+} from "../../utils/toast";
 
 const AddItems = () => {
   const [formData, setFormData] = useState({
@@ -51,23 +55,6 @@ const AddItems = () => {
 
   const [hoverRating, setHoverRating] = useState(0);
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  // const handleImageUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       image: file,
-  //       preview: URL.createObjectURL(file),
-  //     }));
-  //   }
-  // };
-
-  // const handleRating = (rating) => setFormData((prev) => ({ ...prev, rating }));
   const handleRating = (rating) => {
     setFormData((prev) => ({ ...prev, rating }));
     setValue("rating", rating);
@@ -77,14 +64,8 @@ const AddItems = () => {
     setFormData((prev) => ({ ...prev, hearts: prev.hearts + 1 }));
 
   const handleItemSubmit = async (formValues) => {
-    // e.preventDefault();
-
     try {
       const payload = new FormData();
-      // Object.entries(formData).forEach(([key, val]) => {
-      //   if (key === "preview") return;
-      //   payload.append(key, val);
-      // });
 
       Object.entries(formValues).forEach(([key, val]) => {
         if (key === "preview" || key === "image") return;
@@ -94,30 +75,16 @@ const AddItems = () => {
         payload.append(key, val);
       });
 
-      // payload.append("rating", Number(formData.rating) || 0);
-
       if (formData.image) payload.append("image", formData.image);
 
       const { data } = await api.post(API_ROUTES.ITEM.ITEM_CREATE, payload, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // setFormData({
-      //   name: "",
-      //   description: "",
-      //   category: "",
-      //   price: "",
-      //   rating: 0,
-      //   hearts: 0,
-      //   total: 0,
-      //   image: null,
-      //   preview: "",
-      // });
-
       console.log("Add Item API Response:", data);
 
       if (data.success) {
-        toast.success(data.message);
+        showSuccessToast(data.message);
         console.log("Add Item Success:", data.message);
 
         reset({
@@ -146,11 +113,11 @@ const AddItems = () => {
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput) fileInput.value = "";
       } else {
-        toast.warn(data.message);
+        showWarningToast(data.message);
         console.log("Add Item Data Error:", data.message);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || error?.message);
+      showErrorToast(error?.response?.data?.message || error?.message);
       console.log("Add Item Error:", error);
     }
   };
@@ -167,33 +134,6 @@ const AddItems = () => {
             className="space-y-6 sm:space-y-8"
             onSubmit={handleSubmit(handleItemSubmit)}
           >
-            {/* <div className="flex justify-center">
-              <label className="w-full max-w-xs sm:w-72 h-56 sm:h-72 bg-[#2C2F3F]/50 border border-dashed border-teal-500/30 rounded-2xl cursor-pointer flex items-center justify-center overflow-hidden hover:border-teal-400 transition-all">
-                {formData.preview ? (
-                  <img
-                    src={formData.preview}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-center p-4">
-                    <FiUpload className="text-3xl sm:text-4xl text-teal-500 mb-2 mx-auto animate-pulse" />
-                    <p className="text-teal-400 text-sm">
-                      Click to upload product
-                    </p>
-                  </div>
-                )}
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  required
-                />
-              </label>
-            </div> */}
-
             <FileInput
               name="image"
               control={control}
@@ -211,20 +151,6 @@ const AddItems = () => {
 
             <div className="space-y-6">
               <div>
-                {/* <label className="block mb-2 text-base sm:text-lg text-teal-400">
-                  Item Name
-                </label>
-
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100"
-                  placeholder="Item Name"
-                  required
-                /> */}
-
                 <Input
                   label="Item Name"
                   name="name"
@@ -232,25 +158,12 @@ const AddItems = () => {
                   placeholder="Item Name"
                   control={control}
                   required={true}
-                  // errors={errors}
+                  errors={errors}
                   className=""
                 />
               </div>
 
               <div>
-                {/* <label className="block mb-2 text-base sm:text-lg text-teal-400">
-                  Description
-                </label>
-
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  className="w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100 h-32 sm:h-40"
-                  placeholder="Description"
-                  required
-                /> */}
-
                 <Input
                   label="Description"
                   name="description"
@@ -258,40 +171,20 @@ const AddItems = () => {
                   placeholder="Description"
                   control={control}
                   required={true}
-                  // errors={errors}
+                  errors={errors}
                   className="h-32 sm:h-40"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  {/* <label className="block mb-2 text-base sm:text-lg text-teal-400">
-                    Category
-                  </label>
-
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100"
-                    required
-                  >
-                    <option value="">Select Category</option>
-
-                    {categories.map((c) => (
-                      <option key={c} value={c} className="bg-[#2C2F3F]">
-                        {c}
-                      </option>
-                    ))}
-                  </select> */}
-
                   <SelectInput
                     label="Category"
                     name="category"
                     control={control}
                     options={categories.map((c) => ({ value: c, label: c }))}
                     required={true}
-                    // errors={errors}
+                    errors={errors}
                     themeColor="#0D9488"
                     className=""
                   />
@@ -304,17 +197,6 @@ const AddItems = () => {
 
                   <div className="relative">
                     <FaRupeeSign className="absolute left-4 top-1/2 -translate-y-1/2 text-teal-500 text-lg sm:text-xl" />
-                    {/* <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      className="w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100 pl-10 sm:pl-12"
-                      placeholder="Price"
-                      min="0"
-                      step="0.01"
-                      required
-                    /> */}
 
                     <Input
                       label=""
@@ -323,7 +205,7 @@ const AddItems = () => {
                       control={control}
                       placeholder="Price"
                       required
-                      // errors={errors}
+                      errors={errors}
                       min={0}
                       step={0.01}
                       className="pl-10 sm:pl-12"
@@ -374,17 +256,6 @@ const AddItems = () => {
                       <FiHeart />
                     </button>
 
-                    {/* <input
-                      type="number"
-                      name="hearts"
-                      value={formData.hearts}
-                      onChange={handleInputChange}
-                      className="w-full bg-[#2C2F3F]/50 border border-teal-500/20 rounded-xl px-4 py-3 sm:px-5 sm:py-4 focus:outline-none focus:border-teal-400 text-teal-100 pl-10 sm:pl-12"
-                      placeholder="Enter Likes"
-                      min="0"
-                      required
-                    /> */}
-
                     <div className="flex-1">
                       <Input
                         label=""
@@ -393,7 +264,7 @@ const AddItems = () => {
                         control={control}
                         placeholder="Enter Likes"
                         required={true}
-                        // errors={errors}
+                        errors={errors}
                         className="pl-10 sm:pl-12"
                       />
                     </div>
