@@ -3,7 +3,6 @@ import { useState } from "react";
 import { FiList, FiMenu, FiPackage, FiPlusCircle, FiX } from "react-icons/fi";
 import { FaConciergeBell } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { styles } from "../../assets/dummyadmin";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,7 +47,7 @@ const Navbar = () => {
       </div>
 
       {menuOpen && (
-        <div className={styles.mobileMenu}>
+        <div className="lg:hidden flex flex-col space-y-3 mt-4 pb-4">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
