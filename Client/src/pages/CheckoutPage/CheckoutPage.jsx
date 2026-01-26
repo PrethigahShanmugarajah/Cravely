@@ -1,9 +1,10 @@
 // Cravely / Client / src / pages / CheckoutPage / CheckoutPage.jsx
+import Checkout from "../../components/Checkout/Checkout";
 
 const CheckoutPage = () => {
   return (
     <div>
-      <h1>CheckoutPage</h1>
+      <Checkout />
     </div>
   );
 };
