@@ -166,7 +166,7 @@ const Navbar = () => {
           <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-teal-500 hover:text-teal-300 p-2 rounded-xl border-2 border-teal-900/30 transition-colors"
+              className="text-teal-500 hover:text-teal-300 p-2 rounded-xl border-2 border-teal-900/30 transition-colors cursor-pointer"
             >
               <div className="space-y-2">
                 <span
