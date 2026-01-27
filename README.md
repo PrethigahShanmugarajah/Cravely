@@ -97,8 +97,6 @@ git clone https://github.com/PrethigahShanmugarajah/Cravely
 cd Cravely
 ```
 
-````
-
 ### 2️⃣ Backend Setup
 
 ```bash
@@ -175,5 +173,3 @@ Faculty of Computing,<br>
 Sabaragamuwa University of Sri Lanka.
 
 ---
-
-````
